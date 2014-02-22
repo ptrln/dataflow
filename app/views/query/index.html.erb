@@ -1,44 +1,42 @@
 <h1>Query Data</h1>
-<div id="sidebar" class="ui left sidebar vertical floating active">
+<div class="ui black huge launch right attached button" style="width: 70px;">
+      <i class="icon list layout"></i>
+      <span class="text" style="display: none;">Sources</span>
+</div>
+<div id="sidebar" class="ui left sidebar vertical floating">
 
-	<a class="header item">
-	 <i class="add sign icon link icon"></i>Table</a>
+	  <h1 class="ui header">Select Data<h1>
 	 <div class="ui fluid vertical menu">
-
+	 	 <% @schema.each do |title, table| %>
       <div class="header large item">
         <i class="table icon"></i>
-        Customer
+        <%= title.capitalize %>
       </div>
+      <% i = 0 %>
+      <% while i + 2 < table.length %>
         <div class="menu">
-          <a class="item">ID</a>
-          <a class="item">Name</a>
-          <a class="item">Email</a>
+          <a class="item"><%= table[i][0]%></a>
+          <% i += 1 %>
         </div>
-      <div class="header item">
-        <i class="table icon"></i>
-        Purchases
-      </div>
-        <div class="menu">
-          <a class="item">ID</a>
-          <a class="item">Name</a>
-          <a class="item">Email</a>
-        </div>
-      <div class="header item">
-        <i class="table icon"></i>
-        Items
-      </div>
-      <div class="menu">
-          <a class="item">ID</a>
-          <a class="item">Name</a>
-          <a class="item">Email</a>
-       </div>
-     </div>
+      <% end %>
+     <% end %>
+    </div>
 </div>
 
 	<div>Data
 		<p><%= @schema %> </p>
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
+
+			$(".launch.button").mouseenter(function(){
+					$(this).stop().animate({width: '140px'}, 200, 
+			             function(){$(this).find('.text').show();});
+				}).mouseleave(function (event){
+					$(this).find('.text').hide();
+					$(this).stop().animate({width: '70px'}, 200);
+				});
+
+		$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
 		</script>
 	</div>
 
