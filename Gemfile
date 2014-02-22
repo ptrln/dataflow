@@ -26,6 +26,7 @@ end
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem "handsontable_rails", "~> 0.0.2"
+gem 'semantic-ui-sass', '~> 0.13.0.0'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
