@@ -6,6 +6,8 @@ class Database < ActiveRecord::Base
   serialize :schema
   serialize :relations
 
+  before_create :build_relations
+
   RAILS_TABLES = {"schema_migrations" => true}
 
   def connect
@@ -25,7 +27,7 @@ class Database < ActiveRecord::Base
   end
 
   def build_schema
-    return schema if @built_schema
+    return self.schema if self.schema
 
     connect
 
@@ -34,20 +36,20 @@ class Database < ActiveRecord::Base
       next if RAILS_TABLES.has_key?(table_name)
 
       klass = Class.new(ClientBase) do
-        set_table_name table_name
+        self.table_name = table_name
       end
 
       schema[table_name] = klass.columns.map { |c| [c.name, c.type, c.sql_type]}
     end
-    self.schema = schema
 
-    @built_schema = true
+    self.schema = schema
+    self.save
 
     schema
   end
 
   def build_relations
-    return relations if @built_relations
+    return self.relations if self.relations
 
     build_schema
 
@@ -66,14 +68,15 @@ class Database < ActiveRecord::Base
     end
 
     self.relations = relations
-
-    @built_relations = true
+    self.save
 
     relations
   end
 
   def build_classes
     return if @built_classes
+
+    connect
 
     build_relations
 
@@ -84,11 +87,9 @@ class Database < ActiveRecord::Base
       relations = self.relations[table_name]
 
       klass = Class.new(ClientBase) do
-        set_table_name table_name
+        self.table_name = table_name
 
         relations.each do |relationship, table_name|
-          p relationship
-          p table_name
           self.send(relationship, table_name)
         end
       end

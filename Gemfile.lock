@@ -56,6 +56,8 @@ GEM
     multi_json (1.8.4)
     pg (0.17.1)
     polyglot (0.3.4)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -113,6 +115,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   pg
+  quiet_assets
   rails (= 3.2.16)
   sass-rails (~> 3.2.3)
   semantic-ui-sass (~> 0.13.0.0)
