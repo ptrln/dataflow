@@ -1,7 +1,9 @@
 class QueryController < ApplicationController
 
   def index
-  	@tables = ["customer", "items", "purchases"]
+  	db = Database.first
+  	db.build_schema
+  	@schema = db.schema
 		@data = [
     ["", "Maserati", "Mazda", "Mercedes", "Mini", "Mitsubishi"],
     ["2009", 0, 2941, 4303, 354, 5814],
