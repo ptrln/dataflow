@@ -1,8 +1,5 @@
 class DatabasesController < ApplicationController
 
-  def index
-  end
-
   def new
     @database = Database.new
   end
@@ -15,8 +12,5 @@ class DatabasesController < ApplicationController
       render :new
     end
   end
-
-  def show
-    @database = Database.find(params[:id])
-  end
+  
 end

@@ -7,6 +7,7 @@ gem 'rails', '3.2.16'
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'quiet_assets'
 end
 
 gem 'pg'

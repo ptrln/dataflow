@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$("#sidebar").hide();
+	// $("#sidebar").hide();
 
 	var generateData = function(rows, columns){
 		arr = [] 
@@ -22,7 +22,7 @@ $(document).ready(function(){
 
 
 	
-	window.data = generateData(100, 100)
+	// window.data = generateData(100, 100)
 	headers = window.data.shift()
 
 	var _translateToNames = function(row, col){
