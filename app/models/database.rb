@@ -27,7 +27,7 @@ class Database < ActiveRecord::Base
   end
 
   def build_schema
-    return if @built_schema
+    return schema if @built_schema
 
     connect
 
@@ -44,10 +44,12 @@ class Database < ActiveRecord::Base
     self.schema = schema
 
     @built_schema = true
+
+    schema
   end
 
   def build_relations
-    return if @built_relations
+    return relations if @built_relations
 
     build_schema
 
@@ -68,6 +70,8 @@ class Database < ActiveRecord::Base
     self.relations = relations
 
     @built_relations = true
+
+    relations
   end
 
   def build_classes
