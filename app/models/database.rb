@@ -6,8 +6,6 @@ class Database < ActiveRecord::Base
   serialize :schema
   serialize :relations
 
-  after_create :build_schema_and_relations
-
   RAILS_TABLES = {"schema_migrations" => true}
 
   def connect
