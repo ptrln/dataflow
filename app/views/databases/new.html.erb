@@ -1,0 +1,56 @@
+<%= form_for @database, class: "form-horizontal", "role" => "form" do |f| %>
+  <div class="form-group">
+    <label for="database_name" class="col-sm-1 control-label">Name</label>
+    <div class="col-sm-3">
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_adapter" class="col-sm-1 control-label">Adapter</label>
+    <div class="col-sm-3">
+      <%= f.collection_select :adapter, ["postgresql"], :to_s, :to_s %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_encoding" class="col-sm-1 control-label">Encoding</label>
+    <div class="col-sm-3">
+      <%= f.collection_select :encoding, ["utf8"], :to_s, :to_s %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_host" class="col-sm-1 control-label">Host</label>
+    <div class="col-sm-3">
+      <%= f.text_field :host, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_port" class="col-sm-1 control-label">Port</label>
+    <div class="col-sm-3">
+      <%= f.text_field :port, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_database_name" class="col-sm-1 control-label">Database</label>
+    <div class="col-sm-3">
+      <%= f.text_field :database_name, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_username" class="col-sm-1 control-label">Username</label>
+    <div class="col-sm-3">
+      <%= f.text_field :username, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="database_password" class="col-sm-1 control-label">Password</label>
+    <div class="col-sm-3">
+      <%= f.password_field :password, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-1">
+      <%= f.submit "Create Database", class: "btn btn-default" %>
+    </div>
+  </div>
+
+<% end %>

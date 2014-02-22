@@ -6,8 +6,16 @@ class Database < ActiveRecord::Base
 
   after_create :build_schema_and_relations
 
-  def connection
-
+  def connect
+    ClientBase.establish_connection( 
+      adapter: adapter, 
+      encoding: encoding, 
+      host: host, 
+      post: 5432, 
+      database: database_name, 
+      pool: 5, 
+      username: username, 
+      password: password)
   end
 
   private
