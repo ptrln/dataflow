@@ -41,9 +41,7 @@ $(document).ready(function(){
 
 
 	$('#table').handsontable({
-		data: window.data,
-		minSpareRows: 1,
-		minSpareCols: 1, 
+		data: window.data, 
 		rowHeaders: true,
 		colHeaders: headers,
 	    contextMenu: true,
