@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	// $("#sidebar").hide();
 
 	var generateData = function(rows, columns){
 		arr = [] 
@@ -49,5 +48,6 @@ $(document).ready(function(){
 	    width: 1000,
 	    height: 500,
 		afterSelection: afterSelection
+
 	});
 });
