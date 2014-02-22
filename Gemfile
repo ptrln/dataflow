@@ -9,9 +9,7 @@ group :development, :test do
   gem 'sqlite3'
 end
 
-group :production do
-  gem 'pg'
-end
+gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -41,3 +39,10 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+
+# postgres://cfzlpijcmejadl:vqZXlsei1ulgZD2BeI-oks85hb@ec2-54-235-156-5.compute-1.amazonaws.com:5432/d9uomhaqk1qubk
+
+#
+
+# ActiveRecord::Base.establish_connection( adapter: "postgresql", encoding: "utf8", host: "ec2-54-235-156-5.compute-1.amazonaws.com", post: 5432, database: "d9uomhaqk1qubk", pool: 5, username: "cfzlpijcmejadl", password: "vqZXlsei1ulgZD2BeI-oks85hb")
