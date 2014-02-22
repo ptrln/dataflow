@@ -11,6 +11,8 @@ class Database < ActiveRecord::Base
   RAILS_TABLES = {"schema_migrations" => true}
 
   def connect
+    return if @connected
+
     ClientBase.establish_connection( 
       adapter: adapter, 
       encoding: encoding, 
@@ -20,9 +22,15 @@ class Database < ActiveRecord::Base
       pool: 5, 
       username: username, 
       password: password)
+
+    @connected = true
   end
 
   def build_schema
+    return if @built_schema
+
+    connect
+
     schema = Hash.new
     ClientBase.connection.tables.each do |table_name|
       next if RAILS_TABLES.has_key?(table_name)
@@ -34,9 +42,14 @@ class Database < ActiveRecord::Base
       schema[table_name] = klass.columns.map { |c| [c.name, c.type, c.sql_type]}
     end
     self.schema = schema
+
+    @built_schema = true
   end
 
   def build_relations
+    return if @built_relations
+
+    build_schema
 
     relations = Hash.new { Array.new }
 
@@ -53,9 +66,15 @@ class Database < ActiveRecord::Base
     end
 
     self.relations = relations
+
+    @built_relations = true
   end
 
   def build_classes
+    return if @built_classes
+
+    build_relations
+
     self.schema.each do |table_name, _|
 
       class_name = table_name.classify
@@ -74,5 +93,7 @@ class Database < ActiveRecord::Base
 
       Client.const_set(class_name, klass)
     end
+
+    @built_classes = true
   end
 end
