@@ -1,6 +1,5 @@
-Dataflow::Application.routes.draw do
-  
+Dataflow::Application.routes.draw do  
   resources :databases
 
-  root :to => 'databases#index'
+  root to: "query#index"
 end
