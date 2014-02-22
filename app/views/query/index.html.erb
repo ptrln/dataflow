@@ -1,7 +1,44 @@
 <h1>Query Data</h1>
-	<div>Tables</div>
+<div id="sidebar" class="ui left styled vertical floating active sidebar">
+	<i class="add sign icon"></i>
+	<item> table </item>
+	<div class="ui fluid vertical menu">
+      <div class="header item">
+        <i class="table icon"></i>
+        Customer
+      </div>
+        <div class="menu">
+          <a class="item">ID</a>
+          <a class="item">Name</a>
+          <a class="item">Email</a>
+        </div>
+      <div class="header item">
+        <i class="table icon"></i>
+        Purchases
+      </div>
+        <div class="menu">
+          <a class="item">ID</a>
+          <a class="item">Name</a>
+          <a class="item">Email</a>
+        </div>
+      <div class="header item">
+        <i class="table calendar"></i>
+        Items
+      </div>
+      <div class="menu">
+          <a class="item">ID</a>
+          <a class="item">Name</a>
+          <a class="item">Email</a>
+       </div>
+    </div>
+</div>
+
 	<div>Data
-		<p><% @data %><p>
+		<p><%= @data %> </p>
+		<script>
+			var data = <%= @data.to_json.html_safe %>;
+			$('.ui.sidebar').sidebar();
+		</script>
 	</div>
 
 
