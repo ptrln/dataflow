@@ -1,0 +1,14 @@
+#grid-container{
+	width: 1200px;
+	height: 500px;
+}
+
+#table{
+	float: left;
+}
+
+.formula-builder{
+	float: right;
+	width: 200px;
+	height: 150px;
+};
