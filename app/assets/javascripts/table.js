@@ -1,4 +1,16 @@
 $(document).ready(function(){
+  $(".launch.button").mouseenter(function(){
+  	$(this).stop().animate({width: '140px'}, 200, 
+  	 function(){$(this).find('.text').show();});
+		}).mouseleave(function (event){ 
+			$(this).find('.text').hide();
+			$(this).stop().animate({width: '70px'}, 200);});
+
+	$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
+
+
+
+
 	// $("#sidebar").hide();
 
 	var generateData = function(rows, columns){
