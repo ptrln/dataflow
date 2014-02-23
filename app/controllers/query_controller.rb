@@ -5,7 +5,7 @@ class QueryController < ApplicationController
     if db
       execute(db)
     else
-
+      redirect_to new_database_path
     end
   end
 
@@ -17,6 +17,7 @@ class QueryController < ApplicationController
   private
 
   def execute(db)
+    @database = db
     @schema = db.dynamic_schema
     db.build_classes
 

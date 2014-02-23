@@ -6,6 +6,9 @@
 
 <div id="sidebar" class="ui left sidebar vertical thin accordion floating">
   <h2 class="ui header">Select Data<h2>
+    <a class="ui black button">Update Table</a>
+    <br>
+    <a href='<%= new_database_dynamic_column_path @database %>'>Add Dynamic Column</a>
   <div class="ui fluid vertical menu"> <!-- need to add accordian -->
     <% @schema.each do |title, table| %>
       <div class="header item">
