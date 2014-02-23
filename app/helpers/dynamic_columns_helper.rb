@@ -1,0 +1,2 @@
+module DynamicColumnsHelper
+end

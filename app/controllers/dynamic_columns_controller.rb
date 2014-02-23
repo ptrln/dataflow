@@ -1,0 +1,2 @@
+class DynamicColumnsController < ApplicationController
+end
