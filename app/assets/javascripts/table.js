@@ -98,6 +98,7 @@ $(document).ready(function(){
 	}
 
 	var updateData = function(){
+		console.log(params);
 		$.get(window.location.href + "?" + $.param(params), function(response){
 			window.data = response;
 			createTable(window.data);
@@ -214,6 +215,12 @@ $(document).ready(function(){
 		});
 	});
 
+	if(!String.prototype.trim) {  
+	  String.prototype.trim = function () {  
+	    return this.replace(/^\s+|\s+$/g,'');  
+	  };  
+	} 
+
 	// Filter Modal Submitted
 	$('.filter.ui.modal .ui.button').click(function(ev){
 		console.log("modal-submitted");
@@ -228,11 +235,11 @@ $(document).ready(function(){
 
 
 		for(i=0; i < names.length; i ++){
-			var table_name = $(names[i]).text().split(".")[0]
+			var table_name = $(names[i]).text().split(".")[0].trim();
 			if(params.filter[table_name])
-				params.filter[table_name].push([$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()])
+				params.filter[table_name].push([$(names[i]).text().split(".")[1].trim(), criterion[i], $(values[i]).val()])
 			else
-				params.filter[table_name] = [[$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()]]
+				params.filter[table_name] = [[$(names[i]).text().split(".")[1].trim(), criterion[i], $(values[i]).val()]]
 		}
 
 		updateData();
