@@ -18,7 +18,7 @@ class QueryController < ApplicationController
 
     select = {"customers" => ["id", "age", "name", "gender"]}
     filter = {"customers" => [["name", "starts_with", "D"]]}
-    sort = [["customers", "age", "desc"]]
+    sort = [["customers", "age", "asc"]]
 
     sql = construct_sql(select, filter, sort)
 
