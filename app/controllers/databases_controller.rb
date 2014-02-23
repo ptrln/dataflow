@@ -7,7 +7,7 @@ class DatabasesController < ApplicationController
   def create
     @database = Database.new(params[:database])
     if @database.save
-      redirect_to database_path @database
+      redirect_to query_path @database.id
     else
       render :new
     end

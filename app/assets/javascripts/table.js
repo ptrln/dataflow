@@ -67,29 +67,30 @@ $(document).ready(function(){
 		data: window.data, 
 		rowHeaders: true,
 		colHeaders: headers,
-	    contextMenu: true,
-	    stretchH: 'all',
-	    width: 1000,
-	    height: 500,
+    contextMenu: true,
+    stretchH: 'all',
+    width: 1000,
+    height: 500,
 		afterSelection: afterSelection
-
 	});
 
-var data_cols = _.zip.apply(null, window.data);
+
+	if (window.data && window.data.length > 0) {
+		var data_cols = _.zip.apply(null, window.data);
   
-  var countData = function(data) {
-  	result = { };
-		for(i = 0; i < data.length; ++i) {
-		  if(!result[data[i]])
-		  		result[data[i]] = 0;
-		  ++result[data[i]];
+	  var countData = function(data) {
+	  	result = { };
+			for(i = 0; i < data.length; ++i) {
+			  if(!result[data[i]])
+			  		result[data[i]] = 0;
+			  ++result[data[i]];
+			}
+			return result
 		}
-		return result
 	}
 
-
 	// ************ POPULATE TABLE CODE *********** //  
-	$("#sidebar .button").click(function(){
+	$(document).on("click", "#sidebar .button", function(){
 			$.get(window.location.href + "?" + $.param(params), 
 			function(res){
 				window.data = res;
