@@ -91,18 +91,18 @@ class Database < ActiveRecord::Base
             next if through_relation[:name] == table_name.singularize
             next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
             self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
+            added = true
           when :has_many
             next if through_relation[:name] == table_name
             next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
             self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
+            added = true
           end
         end
       end
     end
-    
-    #p added
 
-    #build_nested_relations if added
+    build_nested_relations if added
 
     self.relations
 
