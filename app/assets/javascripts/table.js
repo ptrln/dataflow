@@ -273,14 +273,14 @@ window.runTable = function(){
 
 	var updateParamsFilter = function(ev){
 		params.filter = {}
-		var names = $('.filter.modal .content .filter-criteria .name')
-		var c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
+		var names = $('#filter-container .content .filter-criteria .name')
+		var c = $('#filter-container .content .filter-criteria input[name="Criteria"]').toArray()
 		var criterion = []
 		for(i = 0; i < c.length; i ++){
 			criterion.push($(c[i]).attr("value"));
 		}
 
-		var values = $('.filter.modal .content .filter-criteria input.value');
+		var values = $('#filter-container .content .filter-criteria input.value');
 
 
 		for(i=0; i < names.length; i ++){
@@ -294,12 +294,10 @@ window.runTable = function(){
 	}
 
 	// Filter Modal Submitted
-	$('.filter.ui.modal .ui.button').click(function(ev){
+	$('#filter-submit').click(function(ev){
 		console.log("modal-submitted");
 		updateParamsFilter(ev);
 		updateData();
-
-
 	});
 	$(".header.item").first().click()
 

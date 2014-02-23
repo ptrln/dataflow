@@ -5,7 +5,7 @@
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin floating">
-  <h1 class="ui header" style="text-align:center; padding-top:10px;">Data[x]</h1>
+  <h1 class="ui header" style="text-align:center; padding-top:10px; ">Data[x]</h1>
   <div class="ui fluid teal vertical menu"> <!-- need to add accordian -->
     <% @schema.each do |title, table| %>
       <div class="header item">
@@ -76,7 +76,7 @@
   </div>
   <div class="actions">
     <div class="ui button">Cancel</div>
-    <div class="ui button">Submit</div>
+    <div class="ui button" id="filter-submit">Submit</div>
   </div>
 </div>
 
