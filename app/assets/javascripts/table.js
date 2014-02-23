@@ -89,10 +89,13 @@ var data_cols = _.zip.apply(null, window.data);
 
 
 	// ************ POPULATE TABLE CODE *********** //  
-	var createRequest = function(){
-		$.get(window.location.href + "?" + $.param(params))
-	}
-
+	$("#sidebar .button").click(function(){
+			$.get(window.location.href + "?" + $.param(params), 
+			function(res){
+				window.data = res;
+				$('#table').handsontable('render');
+			});
+	});
 
 	// ************ CREATE DROPDOWNS FOR FILTER MODAL *********** // 
 	// template needs drop name and starting value 
@@ -145,7 +148,7 @@ var data_cols = _.zip.apply(null, window.data);
 	$('.ui.modal').modal();
 
 
-	window.insertFilterRow = function(row, name){
+	var insertFilterRow = function(row, name){
 		console.log("inserting filter row", row, name);
 		_.templateSettings.variable = "temp";
 
@@ -163,11 +166,30 @@ var data_cols = _.zip.apply(null, window.data);
 		$('.dropdown').dropdown();
 	}
 
+	var bind_column_selected_clicks = function(){
+		$(".column_name_dropdown .menu").click(function(ev){
+			var col_selected = $(ev.target).attr("data-value");
+			console.log("column selected", col_selected);
+			
+			var type = schema['customers'][col_selected][1]
+			if(type == "datetime" || type == "integer" || type == "float"){
+				insertFilterRow("num-date", $(ev.target).text());
+			} else if (type == "string") {
+				insertFilterRow("string", $(ev.target).text());
+			} else if (type == "boolean") {
+				insertFilterRow("boolean", $(ev.target).text());
+			}
+			createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema));
+			$(".column_name_dropdown").remove();	
+		});
+	}
+
 	var table_drop_down_clicked = function(ev){
 		console.log("clicked on table select dropdown!!!!");
 		var table_name = $(ev.target).text();
 		console.log("table_name", table_name);
 		createDropDown(".filter.modal .content", "column_name_dropdown", "Select Column From " + table_name, schema[table_name][1]);s
+		bind_column_selected_clicks()
 	}
 
 	// Filter Button pressed, Modal OPENS
@@ -182,22 +204,6 @@ var data_cols = _.zip.apply(null, window.data);
 	});
 
 	// Column Selected s
-	$(".column_name_dropdown .menu").click(function(ev){
-		var col_selected = $(ev.target).attr("data-value");
-		console.log("column selected", col_selected);
-		
-		var type = schema['customers'][col_selected][1]
-		if(type == "datetime" || type == "integer" || type == "float"){
-			insertFilterRow("num-date", $(ev.target).text());
-		} else if (type == "string") {
-			insertFilterRow("string", $(ev.target).text());
-		} else if (type == "boolean") {
-			insertFilterRow("boolean", $(ev.target).text());
-		}
-		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema));
-		$(".column_name_dropdown").remove();	
-	})
-
 
 	// Filter Modal Submitted
 	$('filter.ui.modal .ui.button').click(function(ev){
