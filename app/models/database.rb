@@ -84,19 +84,19 @@ class Database < ActiveRecord::Base
         next if rel[:type] == :belongs_to
 
         through = rel[:name]
-        p through
-        p self.relations[through]
+
         self.relations[through].each do |through_relation|
           case through_relation[:type]
           when :belongs_to
             next if through_relation[:name] == table_name.singularize
-            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name], through: through_relation[:name]})
+            next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
+            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
           when :has_many
             next if through_relation[:name] == table_name
-            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name], through: through_relation[:name]})
+            next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
+            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
           end
         end
-
       end
     end
     
@@ -105,6 +105,8 @@ class Database < ActiveRecord::Base
     #build_nested_relations if added
 
     self.relations
+
+    self.save!
   end
 
   def build_classes
@@ -124,8 +126,8 @@ class Database < ActiveRecord::Base
         self.table_name = table_name
 
         relations.each do |r|
-          if r[:through]
-            self.send(r[:type], r[:through], {:through => r[:name].to_sym})
+          if r[:through].present?
+            self.send(r[:type], r[:name], {:through => r[:through].to_sym})
           else
             self.send(r[:type], r[:name].to_sym)
           end
