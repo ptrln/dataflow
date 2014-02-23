@@ -4,11 +4,11 @@
 }
 
 #table{
-	float: left;
+	/*float: left;*/
 }
 
 .formula-builder{
-	float: right;
+
 	width: 200px;
 	height: 150px;
 };

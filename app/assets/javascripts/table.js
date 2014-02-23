@@ -1,11 +1,4 @@
 $(document).ready(function(){
-  // $(".launch.button").mouseenter(function(){
-  // 	$(this).stop().animate({width: '140px'}, 200, 
-  // 	 function(){$(this).find('.text').show();});
-		// }).mouseleave(function (event){ 
-		// 	$(this).find('.text').hide();
-		// 	$(this).stop().animate({width: '70px'}, 200);});
-
 	$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
 
 	$(".menu a").click(function(){
@@ -16,6 +9,7 @@ $(document).ready(function(){
    }});
 
 	// $("#sidebar").hide();
+
 
 	var generateData = function(rows, columns){
 		arr = [] 
@@ -65,5 +59,19 @@ $(document).ready(function(){
 	    width: 1000,
 	    height: 500,
 		afterSelection: afterSelection
+
 	});
+
+
+
+// ************ FILTER EVENT CODE *********** // 
+
+// $('.ui.dropdown').dropdown();
+
+$('.button.filter').click(function(){
+	console.log("filter");
+
+});
+
+
 });

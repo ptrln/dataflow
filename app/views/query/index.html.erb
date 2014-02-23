@@ -27,15 +27,59 @@
 </div>
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
-
+      var schema = <%= @schema.to_json.html_safe %>; 
 		</script>
 	</div>
 
+
+
 <!-- DARWISH CODE -->
-<div>
-  <div id="grid-container"> 
-    <div id="table" class="handsontable" style="overflow: scroll"></div>
-    <textarea class="formula-builder"> </textarea>
-  </div> 
+
+ 
+
+
+
+  <div>
+    <div id="grid-container"> 
+      <div class="small ui button filter"> Filter </div>
+      <div class="small ui button sort "> Sort </div>
+      <div class="small ui button add_column"> Add Column </div>
+      <div class="filter_dropdown"> 
+        <div class="ui selection dropdown">
+          <input type="hidden" name="gender">
+          <div class="text">Female</div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="1">Male</div>
+            <div class="item active" data-value="0">Female</div>
+          </div>
+        </div>
+      </div> 
+      <div id="table" class="handsontable" style="overflow: scroll"></div>
+      <!-- <textarea class="formula-builder"> </textarea> -->
+    </div> 
+    
+  </div>
+
+
+ <!-- Filter Modal -->
+
+<div class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Modal Title
+  </div>
+  <div class="content">
+    <div class="left">
+      Content can appear on left
+    </div>
+    <div class="right">
+      Content can appear on right
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui button">Cancel</div>
+    <div class="ui button">OK</div>
+  </div>
 </div>
 
