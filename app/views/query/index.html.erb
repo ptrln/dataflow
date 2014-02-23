@@ -36,10 +36,6 @@
 
 <!-- DARWISH CODE -->
 
- 
-
-
-
     <div>
       <div id="grid-container"> 
         <div class="small ui button filter"> Filter </div>
@@ -48,15 +44,13 @@
         <div id="table" class="handsontable" style="overflow: scroll"></div>
         <!-- <textarea class="formula-builder"> </textarea> -->
       </div> 
-      
     </div>
-
 
  <!-- Filter Modal -->
 
 
 <script type="text/template" class="filter-row-string">
-  <div class="ui three column grid filter-critera"> 
+  <div class="ui three column grid filter-criteria"> 
     <div class="column">
       <div class="ui segment">
         <div class="name"> <%%- temp.col_name %> </div>
@@ -80,7 +74,7 @@
 </script>
 
 <script type="text/template" class="filter-row-num-date">
-  <div class="ui three column grid filter-critera"> 
+  <div class="ui three column grid filter-criteria"> 
     <div class="column">
       <div class="ui segment">
         <div class="name"> <%%- temp.col_name %> </div>
@@ -104,14 +98,14 @@
 </script>
 
 <script type="text/template" class="filter-row-boolean">
-  <div class="ui three column grid filter-critera"> 
+  <div class="ui three column grid filter-criteria"> 
     <div class="column">
       <div class="ui segment">
         <div class="name"> <%%- temp.col_name %> </div>
       </div>
     </div>
     <div class="column">
-      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px; height: 50px;">
+      <div class="ui selection dropdown ui segment  " style="margin-left: 60px; height: 50px;">
         <input type="hidden" name="Criteria">
         <div class="text" style="margin-top: 6px"> is </div>
         <i class="dropdown icon"></i>

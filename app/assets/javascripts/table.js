@@ -105,7 +105,9 @@ $(document).ready(function(){
 		$('.dropdown').dropdown();
 	}
 
+	// Filter Button pressed
 	$('.button.filter').click(function(){
+		$('.filter-criteria').remove()
 		console.log("filter");
 		$('.ui.modal').modal("show");
 		insertColumnNamesIntoDropdown();
