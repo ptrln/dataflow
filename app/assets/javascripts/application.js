@@ -15,3 +15,4 @@
 //= require jquery.ui.all
 //= require handsontable_rails
 //= require semantic-ui
+//= require underscore
