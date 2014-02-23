@@ -6,12 +6,13 @@ $(document).ready(function(){
    	$(this).removeClass("active");
    } else {
    	$(this).addClass('active');
-   }});
+  }});
 
 	$(".header.item").click(function() {
-		$(this).next('div').toggle();
+		$(this).next('div').toggle("fast");
 	});
 
+	
 
 
 	var generateData = function(rows, columns){
@@ -64,7 +65,17 @@ $(document).ready(function(){
 
 	});
 
-
+	var data_cols = _.zip.apply(null, window.data);
+  
+  var countData = function(data) {
+  	result = { };
+		for(i = 0; i < data.length; ++i) {
+		  if(!result[data[i]])
+		  		result[data[i]] = 0;
+		  ++result[data[i]];
+		}
+		return result
+	}
 
 	// ************ FILTER EVENT CODE *********** // 
 
@@ -129,9 +140,5 @@ $(document).ready(function(){
 		}
 		$('.column_name_dropdown .text').text("Add Column to Data");
 	});
-
-
-
-     
 
 });
