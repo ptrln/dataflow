@@ -75,7 +75,12 @@ $(document).ready(function(){
 			stretchH: 'all',
 			width: 1000,
 			height: 500,
-			afterSelection: afterSelection
+			afterSelection: afterSelection,
+			cells: function(){
+				var cellProperties = {};
+				cellProperties.readOnly = true;
+				return cellProperties;
+			}
 		});
 	}
 
