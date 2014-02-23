@@ -36,7 +36,6 @@ $(document).ready(function(){
 
 	
 	// window.data = generateData(100, 100)
-	headers = window.data.shift()
 
 	var _translateToNames = function(row, col){
 		return headers[0][col] + "" + row
@@ -67,14 +66,72 @@ $(document).ready(function(){
 
 
 
-// ************ FILTER EVENT CODE *********** // 
+	// ************ FILTER EVENT CODE *********** // 
 
-// $('.ui.dropdown').dropdown();
+	$('.ui.modal').modal();
+	$('.dropdown').dropdown();
 
-$('.button.filter').click(function(){
-	console.log("filter");
+	var insertColumnNamesIntoDropdown = function(){
+		for(i = 0; i < window.headers.length; i++){
+			_.templateSettings.variable = "temp";
+			var template = _.template(
+		  		$("script.column-name-item").html()
+			);
+			var templateData = {
+				 col_index: i,
+		 		 col_name: window.headers[i]
+			}
+			$(".filter.modal .menu").prepend(
+			    template(templateData)
+			);
+		}
+	}
 
-});
+	window.insertFilterRow = function(row, name){
+		console.log("inserting filter row", row, name);
+		_.templateSettings.variable = "temp";
 
+		// Grab the HTML out of our template tag and pre-compile it.
+		var template = _.template(
+		  $("script.filter-row-" + row).html()
+		);
+		// Define our render data (to be put into the "rc" variable).
+		var templateData = {
+		  col_name: name
+		}
+		$(".filter.modal .content").prepend(
+		    template(templateData)
+		);
+		$('.dropdown').dropdown();
+	}
+
+	// Filter Button pressed
+	$('.button.filter').click(function(){
+		$('.filter-criteria').remove()
+		console.log("filter");
+		$('.ui.modal').modal("show");
+		insertColumnNamesIntoDropdown();
+		$('.column_name_dropdown').dropdown();
+		$('.column_name_dropdown .text').text("Add Column to Data");
+	});
+
+	// Method is called when user selects column to filter by
+	$(".filter.modal .menu").click(function(ev){
+		col_selected = ($(ev.target).attr("data-value"));
+		console.log("column selected", col_selected);
+		type = schema['customers'][col_selected][1]
+		if(type == "datetime" || type == "integer" || type == "float"){
+			insertFilterRow("num-date", $(ev.target).text());
+		} else if (type == "string") {
+			insertFilterRow("string", $(ev.target).text());
+		} else if (type == "boolean") {
+			insertFilterRow("boolean", $(ev.target).text());
+		}
+		$('.column_name_dropdown .text').text("Add Column to Data");
+	});
+
+
+
+     
 
 });

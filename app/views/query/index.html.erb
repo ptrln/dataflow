@@ -2,6 +2,7 @@
       <script>
         var data = <%= @data.to_json.html_safe %>;
         var schema = <%= @schema.to_json.html_safe %>; 
+        var headers = window.data.shift()
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin accordion floating">
@@ -34,51 +35,109 @@
     <div class="small ui button filter"> Filter </div>
     <div class="small ui button sort "> Sort </div>
     <div class="small ui button add_column"> Add Column </div>
-    <div class="filter_dropdown"> 
-      <div class="ui selection dropdown">
-        <input type="hidden" name="gender">
-        <div class="text">Female</div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          <div class="item" data-value="1">Male</div>
-          <div class="item active" data-value="0">Female</div>
-        </div>
-      </div>
-    </div> 
   </div>
 </div>
 
 <!-- DARWISH CODE -->
 
- 
-
-
-
   <div>
     <div id="table" class="handsontable" style="overflow: scroll"></div>
-      <!-- <textarea class="formula-builder"> </textarea> -->
-    </div> 
+  </div> 
     
-  </div>
+<!-- Filter Modal -->
 
-</div>
- <!-- Filter Modal -->
-<div class="ui modal">
+
+<script type="text/template" class="filter-row-string">
+  <div class="ui three column grid filter-criteria"> 
+    <div class="column">
+      <div class="ui segment">
+        <div class="name"> <%%- temp.col_name %> </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px;">
+        <input type="hidden" name="Criteria">
+        <div class="text" style="margin-top: 6px"> Contains </div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item active" data-value="contains">Contains</div>
+          <div class="item" data-value="start_with">Starts With</div>
+          <div class="item" data-value="ends_with">Ends With</div>
+          <div class="item" data-value="exactly_matches">Exactly Matches</div>
+        </div>
+      </div>
+    </div>
+    <input class= "column ui segment" style="border: 1px black">
+  </div>
+</script>
+
+<script type="text/template" class="filter-row-num-date">
+  <div class="ui three column grid filter-criteria"> 
+    <div class="column">
+      <div class="ui segment">
+        <div class="name"> <%%- temp.col_name %> </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px;">
+        <input type="hidden" name="Criteria">
+        <div class="text" style="margin-top: 6px"> Contains </div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item active" data-value="equals">Equals</div>
+          <div class="item" data-value="less_than">Less Than</div>
+          <div class="item" data-value="greater_than">Greater Than</div>
+          <div class="item" data-value="is_in">In (Comma Separated Values) </div>
+        </div>
+      </div>
+    </div>
+    <input class= "column ui segment" style="border: 1px black">
+  </div>
+</script>
+
+<script type="text/template" class="filter-row-boolean">
+  <div class="ui three column grid filter-criteria"> 
+    <div class="column">
+      <div class="ui segment">
+        <div class="name"> <%%- temp.col_name %> </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui selection dropdown ui segment  " style="margin-left: 60px;">
+        <input type="hidden" name="Criteria">
+        <div class="text" style="margin-top: 6px"> is </div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item" data-value="equals">is</div>
+        </div>
+      </div>
+    </div>
+    <input class= "column ui segment" style="border: 1px black" placeholder="True or False">
+  </div>
+</script>
+
+<script type="text/template" class="column-name-item">
+  <div class="item" data-value="<%%- temp.col_index %>"><%%- temp.col_name %></div>
+</script> 
+
+<div class="filter ui modal">
   <i class="close icon"></i>
   <div class="header">
-    Modal Title
+    Select Criteria to Filter your Data
   </div>
   <div class="content">
-    <div class="left">
-      Content can appear on left
-    </div>
-    <div class="right">
-      Content can appear on right
+    <!--  inserting filter rows -->
+    <div class="ui selection dropdown ui segment column_name_dropdown" style="margin-left: 60px;">
+      <input type="hidden" name="Criteria">
+      <div class="text" style="margin-top: 6px"> Add Column to Data </div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+       <!-- inserting column names here via javascript -->
+      </div>
     </div>
   </div>
   <div class="actions">
     <div class="ui button">Cancel</div>
-    <div class="ui button">OK</div>
+    <div class="ui button">Submit</div>
   </div>
 </div>
-
