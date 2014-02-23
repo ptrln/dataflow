@@ -66,7 +66,7 @@ $(document).ready(function(){
 	var createTable = function(d){
 		$('#table').remove();
 		$('#table_container').append("<div id='table'>");
-		headers = window.data.shift();
+		headers = window.data.shift() || [];
 		$('#table').handsontable({
 			data: d, 
 			rowHeaders: true,
@@ -155,8 +155,6 @@ $(document).ready(function(){
 		$('.dropdown').dropdown();
 		$('.' + dropdown_class_name + ' .text').text(start);
 	}
-
-
 
 	// insertColumnNamesIntoDropdown(".column_name_dropdown.filter.modal menu", )
 
