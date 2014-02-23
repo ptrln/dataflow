@@ -63,17 +63,21 @@ $(document).ready(function(){
 	var object_types = [] 
 
 
-	$('#table').handsontable({
-		data: window.data, 
-		rowHeaders: true,
-		colHeaders: headers,
-    contextMenu: true,
-    stretchH: 'all',
-    width: 1000,
-    height: 500,
-		afterSelection: afterSelection
-	});
-
+	var createTable = function(d){
+		$('#table').remove();
+		$('#table_container').append("<div id='table'>");
+		headers = window.data.shift();
+		$('#table').handsontable({
+			data: d, 
+			rowHeaders: true,
+			colHeaders: headers,
+			contextMenu: true,
+			stretchH: 'all',
+			width: 1000,
+			height: 500,
+			afterSelection: afterSelection
+		});
+	}
 
 	if (window.data && window.data.length > 0) {
 		var data_cols = _.zip.apply(null, window.data);
@@ -91,11 +95,12 @@ $(document).ready(function(){
 
 	// ************ POPULATE TABLE CODE *********** //  
 	$(document).on("click", "#sidebar .button", function(){
-			$.get(window.location.href + "?" + $.param(params), 
-			function(res){
-				window.data = res;
-				$('#table').handsontable('render');
-			});
+		$.get(window.location.href + "?" + $.param(params), function(response){
+			window.data = response;
+			createTable(window.data);
+			$('#table').handsontable('render');
+		});
+
 	});
 
 
@@ -204,7 +209,7 @@ $(document).ready(function(){
 	});
 
 	// Filter Modal Submitted
-	$('filter.ui.modal .ui.button').click(function(ev){
+	$('.filter.ui.modal .ui.button').click(function(ev){
 		console.log("modal-submitted")
 		names = $('.filter.modal .content .filter-criteria .name')
 		c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
