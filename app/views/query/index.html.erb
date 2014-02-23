@@ -1,12 +1,12 @@
 <h1>Query Data</h1>
 
 <%= javascript_include_tag "table" %> 
-<div id="sidebar" class="ui left sidebar vertical floating active">
 
 <div class="ui black huge launch right attached button" style="width: 70px;">
       <i class="icon list layout"></i>
       <span class="text" style="display: none;">Sources</span>
 </div>
+
 <div id="sidebar" class="ui left sidebar vertical floating">
 
 	 <h1 class="ui header">Select Data<h1>
@@ -28,27 +28,47 @@
 </div>
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
-
-			$(".launch.button").mouseenter(function(){
-					$(this).stop().animate({width: '140px'}, 200, 
-			             function(){$(this).find('.text').show();});
-				}).mouseleave(function (event){
-					$(this).find('.text').hide();
-					$(this).stop().animate({width: '70px'}, 200);
-				});
-
-		$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
+      var schema = <%= @schema.to_json.html_safe %>; 
 		</script>
 	</div>
+
+
+
+
+
 
   
 
 
 <!-- DARWISH CODE -->
-<div>
-  <div id="grid-container"> 
-    <div id="table" class="handsontable" style="overflow: scroll"></div>
-    <!-- <textarea class="formula-builder"> </textarea> -->
-  </div> 
-</div>
+
+ 
+
+
+
+  <div>
+    <div id="grid-container"> 
+      <div class="small ui button filter"> Filter </div>
+      <div class="small ui button sort "> Sort </div>
+      <div class="small ui button add_column"> Add Column </div>
+      <div class="filter_dropdown"> 
+        <div class="ui selection dropdown">
+          <input type="hidden" name="gender">
+          <div class="text">Female</div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="1">Male</div>
+            <div class="item active" data-value="0">Female</div>
+          </div>
+        </div>
+      </div> 
+      <div id="table" class="handsontable" style="overflow: scroll"></div>
+      <!-- <textarea class="formula-builder"> </textarea> -->
+    </div> 
+    
+  </div>
+
+
+ <!-- Filter Modal -->
+
 
