@@ -2,7 +2,11 @@ class QueryController < ApplicationController
 
   def index
     db = Database.first
-    execute(db)
+    if db
+      execute(db)
+    else
+
+    end
   end
 
   def show
