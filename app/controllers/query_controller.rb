@@ -17,8 +17,8 @@ class QueryController < ApplicationController
     db.build_classes
 
     select = {"customers" => ["id", "age", "name", "gender"]}
-    filter = {"customers" => [["age", "greater_than", 20]]}
-    sort = {}
+    filter = {"customers" => [["name", "starts_with", "D"]]}
+    sort = [["customers", "age", "asc"]]
 
     sql = construct_sql(select, filter, sort)
 
@@ -32,7 +32,7 @@ class QueryController < ApplicationController
     end
   end
 
-  def column_name_array(select_params, escape: false)
+  def column_name_array(select_params, escape = false)
     columns = []
     select_params.each do |table_name, column_names|
       if escape
@@ -52,21 +52,20 @@ class QueryController < ApplicationController
   end
 
   def construct_select_sql(select, filter, sort)
-    tables = (select.keys + filter.keys + sort.keys).uniq
+    tables = (select.keys + filter.keys + sort.map(&:first)).uniq
     main_klass = tables.shift.classify.constantize
     tables.each do |table|
       main_klass = main_klass.joins(table.to_sym)
     end
-    main_klass.select(column_name_array(select, escape: true))
+    main_klass.select(column_name_array(select, true))
   end
 
   def construct_filter_sql(main_klass, filters)
     if filters.length > 0
       filters.each do |table_name, column_filters|
         column_filters.each do |column_filter|
-          op = filter_operation(column_filter[1], column_filter[2])
-          p "\"#{table_name}\".\"#{column_filter[0]}\" #{op}"
-          main_klass = main_klass.where("\"#{table_name}\".\"#{column_filter[0]}\" #{op}", column_filter[2]) if op
+          op, arg = filter_operation(column_filter[1], column_filter[2])
+          main_klass = main_klass.where("\"#{table_name}\".\"#{column_filter[0]}\" #{op}", arg) if op
         end
       end
     end
@@ -75,15 +74,22 @@ class QueryController < ApplicationController
 
   def filter_operation(operand, values)
     case operand
-    when "greater_than" then " > ? "
-    when "less_than" then " < ? "
-    when "equal_to", "equal" then " = ? "
-    when "in" then " IN (?) "
+    when "greater_than" then [" > ? ", values]
+    when "less_than" then [" < ? ", values]
+    when "equal_to", "equal", "exactly_matches" then [" = ? ", values]
+    when "in" then [" IN (?) ", values.split(",")]
+    when "contains" then [" LIKE ?", values]
+    when "ends_with" then [" LIKE ?", "%#{values}"]
+    when "starts_with" then [" LIKE ?", "#{values}%"]
     else nil
     end
   end
 
   def construct_sort_sql(main_klass, sort)
+    sort.each do |table, column, order|
+      next unless ["DESC", "ASC"].include?(order.upcase)
+      main_klass = main_klass.order("\"#{table}\".\"#{column}\" #{order.upcase}")
+    end
     main_klass
   end
 
