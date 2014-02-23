@@ -1,26 +1,31 @@
-<%= form_for [@database, @dynamic_column], class: "form-horizontal", "role" => "form" do |f| %>
-  <div class="form-group">
-    <label for="database_name" class="col-sm-1 control-label">Table</label>
-    <div class="col-sm-3">
-      <%= f.collection_select :table, @schema.keys, :to_s, :to_s %>
+<div id="form1">
+  <%= form_for [@database, @dynamic_column], class: "form-horizontal", "role" => "form" do |f| %>
+  <div class="ui form segment">
+    <h3 class="ui header">Create a Dynamic Column</h3>
+    <div class="form-group" id="table-selector">
+      <label for="database_name" class="col-sm-1 control-label">Table</label>
+      <div class="table-dropdown">
+        <%= f.collection_select :table, @schema.keys, :to_s, :to_s %>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="database_adapter" class="col-sm-1 control-label">Name</label>
-    <div class="col-sm-3">
-      <%= f.text_field :name %>
+    <div class="form-group">
+      <label for="database_adapter" class="col-sm-1 control-label">Name</label>
+      <div class="field">
+        <%= f.text_field :name %>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="database_encoding" class="col-sm-1 control-label">Code</label>
-    <div class="col-sm-3">
-      <%= f.text_area :code %>
+    <div class="form-group">
+      <label for="database_encoding" class="col-sm-1 control-label">Code</label>
+      <div class="field">
+        <%= f.text_area :code %>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-1">
-      <%= f.submit "Create Dynamic Column", class: "btn btn-default" %>
-    </div>
-  </div>
+    <div class="form-group">
+      <div class="col-sm-offset-1">
 
-<% end %>
+        <%= f.submit "Create Dynamic Column", class: "ui black submit button" %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
