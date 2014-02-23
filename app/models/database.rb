@@ -120,8 +120,8 @@ class Database < ActiveRecord::Base
   end
 
   def rebuild!
-    self.schema = {}
-    self.relations = {}
+    self.schema = nil
+    self.relations = nil
     self.save!
     self.build_schema
     self.build_relations

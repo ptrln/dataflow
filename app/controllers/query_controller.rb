@@ -27,7 +27,7 @@ class QueryController < ApplicationController
       @data = []
     else
       dynamic_select, is_dynamic_select, dynamic_fields = dynamicify_select(db, select)
-      filter = params[:filter] || {"customers" => [["item_count", "starts_with", "1"]]}
+      filter = params[:filter] || {}#{"customers" => [["item_count", "starts_with", "1"]]}
       dynamic_filter_fields, is_dynamic_filter = dynamicify_filter(db, filter)
 
       sort = []#[["customers", "age", "asc"]]
