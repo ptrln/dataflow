@@ -27,7 +27,7 @@ class QueryController < ApplicationController
       @data = []
     else
       dynamic_select, is_dynamic_select, dynamic_fields = dynamicify_select(db, select)
-      filter = params[:filter] || params[:filter] #{"customers" => [["name", "starts_with", "D"]]}
+      filter = params[:filter] || {} #{"customers" => [["name", "starts_with", "D"]]}
       dynamic_filter_fields, is_dynamic_filter = dynamicify_filter(db, filter)
       sort = []#[["customers", "age", "asc"]]
 
@@ -56,7 +56,7 @@ class QueryController < ApplicationController
       cloned.each_with_index do |column, index|
         if db.dynamic_columns.where(table: table, name: column).count > 0
           cloned[index] = "id"
-          dynamic_fields << [table.classify.constantize, column]
+          dynamic_fields << [table, column]
         else
           dynamic_fields << nil
         end
@@ -76,8 +76,8 @@ class QueryController < ApplicationController
     dynamic_fields = Hash.new { Array.new }
     filter.each do |table, columns|
       columns.each_with_index do |column, index|
-        if db.dynamic_columns.where(table: table, name: column).count > 0
-          dynamic_fields[table] = dynamic_fields[table] << columns[index]
+        if db.dynamic_columns.where(table: table, name: column.first).count > 0
+          dynamic_fields[table] = dynamic_fields[table] << column
           columns[index] = nil
         end
       end
@@ -95,11 +95,18 @@ class QueryController < ApplicationController
     data.each_with_index do |row, index|
       next if index == 0
 
-      dynamic_select_fields.each_with_index do |(klass, method), row_index|
-        next unless klass && method
+      dynamic_select_fields.each_with_index do |(table_klass, method), row_index|
+        next unless table_klass && method
+        klass = table_klass.classify.constantize
         row[row_index] = klass.find(row[row_index]).send(method)
+
+        if dynamic_select_fields[table_klass].include?(method)
+          p true
+          #data[index] = nil
+        end
       end
     end
+    data.compact!
   end
 
   def column_name_array(select_params, escape = false)
