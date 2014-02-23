@@ -63,40 +63,54 @@ $(document).ready(function(){
 	var object_types = [] 
 
 
-	$('#table').handsontable({
-		data: window.data, 
-		rowHeaders: true,
-		colHeaders: headers,
-	    contextMenu: true,
-	    stretchH: 'all',
-	    width: 1000,
-	    height: 500,
-		afterSelection: afterSelection
-
-	});
-
-var data_cols = _.zip.apply(null, window.data);
-  
-  var countData = function(data) {
-  	result = { };
-		for(i = 0; i < data.length; ++i) {
-		  if(!result[data[i]])
-		  		result[data[i]] = 0;
-		  ++result[data[i]];
-		}
-		return result
+	var createTable = function(d){
+		$('#table').remove();
+		$('#table_container').append("<div id='table'>");
+		headers = window.data.shift();
+		$('#table').handsontable({
+			data: d, 
+			rowHeaders: true,
+			colHeaders: headers,
+			contextMenu: true,
+			stretchH: 'all',
+			width: 1000,
+			height: 500,
+			afterSelection: afterSelection
+		});
 	}
 
+	if (window.data && window.data.length > 0) {
+		var data_cols = _.zip.apply(null, window.data);
+  
+	  var countData = function(data) {
+	  	result = { };
+			for(i = 0; i < data.length; ++i) {
+			  if(!result[data[i]])
+			  		result[data[i]] = 0;
+			  ++result[data[i]];
+			}
+			return result
+		}
+	}
+
+	var updateData = function(){
+		$.get(window.location.href + "?" + $.param(params), function(response){
+			window.data = response;
+			createTable(window.data);
+			$('#table').handsontable('render');
+		});
+	}
 
 	// ************ POPULATE TABLE CODE *********** //  
-	var createRequest = function(){
-		$.get(window.location.href + "?" + $.param(params))
-	}
+	$(document).on("click", "#sidebar .button", function(){
+		updateData()
+	});
 
 
 	// ************ CREATE DROPDOWNS FOR FILTER MODAL *********** // 
 	// template needs drop name and starting value 
 	// another method populates the menu items
+
 	var getDropdown = function(class_name, starting){
 		for(i = 0; i < window.headers.length; i++){
 			_.templateSettings.variable = "temp";
@@ -137,6 +151,7 @@ var data_cols = _.zip.apply(null, window.data);
 	}
 
 
+
 	// insertColumnNamesIntoDropdown(".column_name_dropdown.filter.modal menu", )
 
 
@@ -145,7 +160,7 @@ var data_cols = _.zip.apply(null, window.data);
 	$('.ui.modal').modal();
 
 
-	window.insertFilterRow = function(row, name){
+	var insertFilterRow = function(row, name){
 		console.log("inserting filter row", row, name);
 		_.templateSettings.variable = "temp";
 
@@ -163,52 +178,61 @@ var data_cols = _.zip.apply(null, window.data);
 		$('.dropdown').dropdown();
 	}
 
-	var table_drop_down_clicked = function(ev){
-		console.log("clicked on table select dropdown!!!!");
-		var table_name = $(ev.target).text();
-		console.log("table_name", table_name);
-		createDropDown(".filter.modal .content", "column_name_dropdown", "Select Column From " + table_name, schema[table_name][1]);s
-	}
 
 	// Filter Button pressed, Modal OPENS
 	$('.button.filter').click(function(){
 		console.log("filter");
 		$('.filter-criteria').remove()
 		$('.filter .dropdown').remove()
-		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema))
-		$(".table_name_dropdown .menu").click(function(ev){table_drop_down_clicked(ev)});
 		$('.ui.modal').modal("show");
-		// $('.table_name_dropdown .text').text("Add Column to Data");
+
+		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema))
+
+		$('.table_name_dropdown .menu').click(function(ev){
+			$('.column_name_dropdown').remove();
+			var table_name = $(ev.target).text();
+			col_names = [] 
+			for(i=0; i < schema[table_name].length; i++){
+				col_names.push(table_name + "." + schema[table_name][i][0]);
+			}
+			createDropDown(".filter.modal .content", "column_name_dropdown", "Select Column From " + table_name, col_names);
+			$(".column_name_dropdown .menu").click(function(ev){
+				var col_selected = ($(ev.target).attr("data-value"));
+				var type = schema[table_name][col_selected][1];
+				if(type == "datetime" || type == "integer" || type == "float"){
+					insertFilterRow("num-date", $(ev.target).text());
+				} else if (type == "string") {
+					insertFilterRow("string", $(ev.target).text());
+				} else if (type == "boolean") {
+					insertFilterRow("boolean", $(ev.target).text());
+				}
+				$('.table_name_dropdown .text').text("Select Table");
+			});	
+		});
 	});
 
-	// Column Selected s
-	$(".column_name_dropdown .menu").click(function(ev){
-		var col_selected = $(ev.target).attr("data-value");
-		console.log("column selected", col_selected);
-		
-		var type = schema['customers'][col_selected][1]
-		if(type == "datetime" || type == "integer" || type == "float"){
-			insertFilterRow("num-date", $(ev.target).text());
-		} else if (type == "string") {
-			insertFilterRow("string", $(ev.target).text());
-		} else if (type == "boolean") {
-			insertFilterRow("boolean", $(ev.target).text());
-		}
-		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema));
-		$(".column_name_dropdown").remove();	
-	})
-
-
 	// Filter Modal Submitted
-	$('filter.ui.modal .ui.button').click(function(ev){
-		console.log("modal-submitted")
-		names = $('.filter.modal .content .filter-criteria .name')
-		c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
-		criterion = []
+	$('.filter.ui.modal .ui.button').click(function(ev){
+		console.log("modal-submitted");
+		var names = $('.filter.modal .content .filter-criteria .name')
+		var c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
+		var criterion = []
 		for(i = 0; i < c.length; i ++){
 			criterion.push($(c[i]).attr("value"));
 		}
-		values = $('.filter.modal .content .filter-criteria input.value');
+
+		var values = $('.filter.modal .content .filter-criteria input.value');
+
+
+		for(i=0; i < names.length; i ++){
+			var table_name = $(names[i]).text().split(".")[0]
+			if(params.filter[table_name])
+				params.filter[table_name].push([$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()])
+			else
+				params.filter[table_name] = [[$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()]]
+		}
+
+		updateData();
 
 	});
 
