@@ -4,7 +4,7 @@
         var schema = <%= @schema.to_json.html_safe %>; 
       </script>
 
-<div id="sidebar" class="ui left sidebar vertical thin accordion floating">
+<div id="sidebar" class="ui left sidebar vertical thin accordion floating ">
   <h2 class="ui header">Select Data<h2>
     <a class="ui black button">Update Table</a>
   <div class="ui fluid vertical menu"> <!-- need to add accordian -->
@@ -35,25 +35,29 @@
 		</script>
 	</div>
 
-<div class="segment">
-  <h1 class="ui header">Query Data</h1>
+<!-- <div class="ui page grid">"> -->
+<div class="ui page grid">
   <div class="ui right floated black launch button">
     <i class="list layout icon"></i> Sources
   </div>
+  <h1 class="ui header">Query Data</h1>
+  
 
   <div id="grid-container"> 
     <div class="small ui button filter"> Filter </div>
     <div class="small ui button sort "> Sort </div>
     <div class="small ui button add_column"><a href='<%= new_database_dynamic_column_path @database %>'> Add Dynamic Column </a></div>
   </div>
-</div>
+</div> 
+
 
 <!-- DARWISH CODE -->
 
+
+
   <div id="table_container">
     <div id="table" class="handsontable" style="overflow: scroll"></div>
-  </div> 
-    
+  </div>
 <!-- Filter Modal -->
 
 
