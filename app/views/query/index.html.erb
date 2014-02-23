@@ -5,7 +5,7 @@
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin floating">
-  <div class="ui fluid green vertical menu"> <!-- need to add accordian -->
+  <div class="ui fluid teal vertical menu"> <!-- need to add accordian -->
     <% @schema.each do |title, table| %>
       <div class="header item">
         <i class="table icon"></i>
@@ -15,7 +15,7 @@
     <div class="table <%= title %> menu" style="display:none;"> 
       <% i = 0 %>
       <% while i  < table.length %>
-        <a class="green item" data-table="<%= title %>" data-column="<%=table[i][0]%>"><%= table[i][0]%></a>
+        <a class="teal item" data-table="<%= title %>" data-column="<%=table[i][0]%>"><%= table[i][0]%></a>
         <% i += 1 %>
       <% end %>
     </div>
