@@ -8,7 +8,7 @@ class Database < ActiveRecord::Base
 
   has_many :dynamic_columns
 
-  before_create :build_relations
+  after_create :build_relations
 
   RAILS_TABLES = {"schema_migrations" => true}
 
