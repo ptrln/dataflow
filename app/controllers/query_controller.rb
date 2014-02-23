@@ -16,7 +16,7 @@ class QueryController < ApplicationController
     @schema = db.dynamic_schema
     db.build_classes
 
-    select = {"customers" => ["id", "item_count", "name", "gender"]}
+    select = {"customers" => ["id", "email", "name", "gender"]}
     dynamic_select, is_dynamic, dynamic_fields = dynamicify_select(db, select)
     filter = {}#{"customers" => [["name", "starts_with", "D"]]}
     sort = [["customers", "age", "asc"]]
