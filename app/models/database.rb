@@ -105,8 +105,15 @@ class Database < ActiveRecord::Base
     build_nested_relations if added
 
     self.relations
-
     self.save!
+  end
+
+  def rebuild!
+    self.schema = {}
+    self.relations = {}
+    self.save!
+    self.build_schema
+    self.build_relations
   end
 
   def build_classes
@@ -132,6 +139,9 @@ class Database < ActiveRecord::Base
             self.send(r[:type], r[:name].to_sym)
           end
         end
+
+
+
       end)
     end
 
