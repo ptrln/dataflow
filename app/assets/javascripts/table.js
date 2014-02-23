@@ -1,4 +1,5 @@
 $(document).ready(function(){
+window.runTable = function(){
 	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
 	$(".menu a").click(function(){
@@ -242,5 +243,5 @@ $(document).ready(function(){
 	window.setTimeout(function(){
 		$(".ui.right.floated.black.launch.button").click()
 	}, 100);
-
+}();
 });
