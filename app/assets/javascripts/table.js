@@ -207,7 +207,8 @@ $(document).ready(function(){
 					insertFilterRow("string", $(ev.target).text());
 				} else if (type == "boolean") {
 					insertFilterRow("boolean", $(ev.target).text());
-				}
+				} else if (type == "dynamic")  
+					insertFilterRow("dynamic", $(ev.target).text());
 				$('.table_name_dropdown .text').text("Select Table");
 			});	
 		});
@@ -237,5 +238,9 @@ $(document).ready(function(){
 		updateData();
 
 	});
+
+	window.setTimeout(function(){
+		$(".ui.right.floated.black.launch.button").click()
+	}, 100);
 
 });
