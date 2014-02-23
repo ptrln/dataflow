@@ -60,8 +60,8 @@ class Database < ActiveRecord::Base
         if column_name.match(/.+_id$/)
           relation = column_name.gsub(/_id$/, "")
           if self.schema.has_key?(relation.pluralize)
-            relations[table_name] = relations[table_name].push(["belongs_to", relation])
-            relations[relation.pluralize] = relations[relation.pluralize].push(["has_many", table_name.pluralize])
+            relations[table_name] = relations[table_name].push({type: :belongs_to, name: relation, through: nil})
+            relations[relation.pluralize] = relations[relation.pluralize].push({type: :has_many, name: table_name.pluralize, through: nil})
           end
         end
       end
@@ -70,7 +70,43 @@ class Database < ActiveRecord::Base
     self.relations = relations
     self.save
 
-    relations
+    build_nested_relations
+
+    self.relations
+  end
+
+  def build_nested_relations
+    relations = self.relations
+    added = false
+
+    self.relations.each do |table_name, rels|
+      rels.each do |rel|
+        next if rel[:type] == :belongs_to
+
+        through = rel[:name]
+
+        self.relations[through].each do |through_relation|
+          case through_relation[:type]
+          when :belongs_to
+            next if through_relation[:name] == table_name.singularize
+            next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
+            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
+            added = true
+          when :has_many
+            next if through_relation[:name] == table_name
+            next if self.relations[table_name].any? { |r| r[:name] == through_relation[:name].pluralize }
+            self.relations[table_name] = self.relations[table_name].push({type: :has_many, name: through_relation[:name].pluralize, through: through.to_sym})
+            added = true
+          end
+        end
+      end
+    end
+
+    build_nested_relations if added
+
+    self.relations
+
+    self.save!
   end
 
   def build_classes
@@ -86,15 +122,17 @@ class Database < ActiveRecord::Base
 
       relations = self.relations[table_name]
 
-      klass = Class.new(ClientBase) do
+      Object.const_set(class_name, Class.new(ClientBase) do
         self.table_name = table_name
 
-        relations.each do |relationship, table_name|
-          self.send(relationship, table_name)
+        relations.each do |r|
+          if r[:through].present?
+            self.send(r[:type], r[:name], {:through => r[:through].to_sym})
+          else
+            self.send(r[:type], r[:name].to_sym)
+          end
         end
-      end
-
-      Client.const_set(class_name, klass)
+      end)
     end
 
     @built_classes = true

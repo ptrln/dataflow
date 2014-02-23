@@ -1,28 +1,15 @@
-#grid-container{
+/*#grid-container{
 	width: 1200px;
 	height: 500px;
 }
 
 #table{
-	/*float: left;*/
+	float: left;
 }
 
 .formula-builder{
 
 	width: 200px;
 	height: 150px;
-}
 
-.filter-criteria input{
-	height: 100px;
-	width: 100%;
-	border-radius: 5px;
-}
-
-.filter-dropdown{
-	height: 35px;
-}
-
-input.column.ui.segment{
-	height: 35px;
-}
+};*/
