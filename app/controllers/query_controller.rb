@@ -32,7 +32,7 @@ class QueryController < ApplicationController
     end
   end
 
-  def column_name_array(select_params, escape: false)
+  def column_name_array(select_params, escape = false)
     columns = []
     select_params.each do |table_name, column_names|
       if escape
@@ -57,7 +57,7 @@ class QueryController < ApplicationController
     tables.each do |table|
       main_klass = main_klass.joins(table.to_sym)
     end
-    main_klass.select(column_name_array(select, escape: true))
+    main_klass.select(column_name_array(select, true))
   end
 
   def construct_filter_sql(main_klass, filters)
