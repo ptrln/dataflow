@@ -245,6 +245,8 @@ $(document).ready(function(){
 		updateData();
 
 	});
+	$(".header.item").first().click()
+
 
 	window.setTimeout(function(){
 		$(".ui.right.floated.black.launch.button").click()
