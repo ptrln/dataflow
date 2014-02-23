@@ -58,6 +58,9 @@
         Add Dynamic Column
       </div>
     </a>
+    <div class="ui button reset"> 
+      Reset 
+    </div>
     <a href="#" id='export_csv_btn'>
       <div class="ui button add_column">
         <i class="download disk icon"></i>
@@ -67,11 +70,17 @@
   </div>
 </div>
 
+<div id="filter-container">
+  <div class="content">
+    <!-- Insert Content -->
+  </div>
+  <div class="actions">
+    <div class="ui button">Cancel</div>
+    <div class="ui button">Submit</div>
+  </div>
+</div>
 
 <!-- DARWISH CODE -->
-
-
-
   <div id="table_container">
     <div id="table" class="handsontable" style="overflow: scroll"></div>
   </div>
@@ -86,7 +95,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px;">
+      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 30px;">
         <input type="hidden" name="Criteria">
         <div class="text" style="margin-top: 6px"> Contains </div>
         <i class="dropdown icon"></i>
@@ -110,7 +119,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px;">
+      <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 30px;">
         <input type="hidden" name="Criteria">
         <div class="text" style="margin-top: 6px"> Equals </div>
         <i class="dropdown icon"></i>
@@ -134,7 +143,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="ui selection dropdown ui segment  " style="margin-left: 60px;">
+      <div class="ui selection dropdown ui segment  " style="margin-left: 30px;">
         <input type="hidden" name="Criteria">
         <div class="text" style="margin-top: 6px"> is </div>
         <i class="dropdown icon"></i>
@@ -155,7 +164,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="ui selection dropdown ui segment  " style="margin-left: 60px;">
+      <div class="ui selection dropdown ui segment  " style="margin-left: 30px;">
         <input type="hidden" name="Criteria">
         <div class="text" style="margin-top: 6px"> Equals </div>
         <i class="dropdown icon"></i>
@@ -198,7 +207,7 @@
   <div class="content">
     <!-- Insert Content -->
   </div>
-  <div class="actions">
+  <div class="green ui buttons actions">
     <div class="ui button">Cancel</div>
     <div class="ui button">Submit</div>
   </div>
