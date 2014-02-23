@@ -19,3 +19,10 @@
 	border-radius: 5px;
 }
 
+.filter-dropdown{
+	height: 35px;
+}
+
+input.column.ui.segment{
+	height: 35px;
+}
