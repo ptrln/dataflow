@@ -4,17 +4,22 @@ $(document).ready(function(){
 
 
 	$(".menu a").click(function(){
-	   if ($(this).hasClass("active")) {
-	   	$(this).removeClass("active");
+		var $this = $(this);
+	   if ($this.hasClass("active")) {
+	   	$this.removeClass("active");
+	   	params.select[$this.data('table')].splice(params.select[$this.data('table')].indexOf($this.data('column')), 1)
 	   } else {
-	   	$(this).addClass('active');
-   	}});
+	   	$this.addClass('active');
+	   	if (params.select[$this.data('table')])
+			params.select[$this.data('table')].push($this.data('column'))
+	   	else
+	   		params.select[$this.data('table')] = [$this.data('column')]
+   	  }
+   	});
 
 	$(".header.item").click(function() {
 		$(this).next('div').toggle();
 	});
-
-
 
 	var generateData = function(rows, columns){
 		arr = [] 
@@ -66,28 +71,66 @@ $(document).ready(function(){
 
 	});
 
+	
 
 
-	// ************ FILTER EVENT CODE *********** // 
 
-	$('.ui.modal').modal();
-	$('.dropdown').dropdown();
+	// ************ POPULATE TABLE CODE *********** //  
+	var createRequest = function(){
+		$.get(window.location.href + "?" + $.param(params))
+	}
 
-	var insertColumnNamesIntoDropdown = function(){
+
+	// ************ CREATE DROPDOWNS FOR FILTER MODAL *********** // 
+	// template needs drop name and starting value 
+	// another method populates the menu items
+	var getDropdown = function(class_name, starting){
 		for(i = 0; i < window.headers.length; i++){
+			_.templateSettings.variable = "temp";
+			var template = _.template(
+		  		$("script.ui-dropdown").html()
+			);
+			var templateData = {
+				 dropdown_name: class_name,
+		 		 starting_value: starting
+			}
+			return template(templateData);
+		}
+	}
+
+	var insertColumnNamesIntoDropdown = function(dropdown_menu_selector, values){
+		for(i = 0; i < values.length; i++){
 			_.templateSettings.variable = "temp";
 			var template = _.template(
 		  		$("script.column-name-item").html()
 			);
 			var templateData = {
 				 col_index: i,
-		 		 col_name: window.headers[i]
+		 		 col_name: values[i]
 			}
-			$(".filter.modal .menu").prepend(
+			$(dropdown_menu_selector).prepend(
 			    template(templateData)
 			);
 		}
+	}	
+
+	window.createDropDown = function(selector_to_append, dropdown_class_name, start, value_options){
+		$(selector_to_append).append(
+			getDropdown(dropdown_class_name, start)
+		);
+		insertColumnNamesIntoDropdown("." + dropdown_class_name + " .menu", value_options)
+		$('.dropdown').dropdown();
+		$('.' + dropdown_class_name + ' .text').text(start);
 	}
+
+
+	// insertColumnNamesIntoDropdown(".column_name_dropdown.filter.modal menu", )
+
+
+	// ************ FILTER EVENT CssODE *********** // 
+
+	$('.ui.modal').modal();
+
 
 	window.insertFilterRow = function(row, name){
 		console.log("inserting filter row", row, name);
@@ -107,21 +150,29 @@ $(document).ready(function(){
 		$('.dropdown').dropdown();
 	}
 
-	// Filter Button pressed
+	var table_drop_down_clicked = function(ev){
+		console.log("clicked on table select dropdown!!!!");
+		var table_name = $(ev.target).text();
+		console.log("table_name", table_name);
+		createDropDown(".filter.modal .content", "column_name_dropdown", "Select Column From " + table_name, schema[table_name][1]);s
+	}
+
+	// Filter Button pressed, Modal OPENS
 	$('.button.filter').click(function(){
-		$('.filter-criteria').remove()
-		$('.column_name_dropdown .item').remove()
 		console.log("filter");
+		$('.filter-criteria').remove()
+		$('.filter .dropdown').remove()
+		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema))
+		$(".table_name_dropdown .menu").click(function(ev){table_drop_down_clicked(ev)});
 		$('.ui.modal').modal("show");
-		insertColumnNamesIntoDropdown();
-		$('.column_name_dropdown').dropdown();
-		$('.column_name_dropdown .text').text("Add Column to Data");
+		// $('.table_name_dropdown .text').text("Add Column to Data");
 	});
 
-	// User selects column to filter by
-	$(".filter.modal .menu").click(function(ev){
-		var col_selected = ($(ev.target).attr("data-value"));
+	// Column Selected s
+	$(".column_name_dropdown .menu").click(function(ev){
+		var col_selected = $(ev.target).attr("data-value");
 		console.log("column selected", col_selected);
+		
 		var type = schema['customers'][col_selected][1]
 		if(type == "datetime" || type == "integer" || type == "float"){
 			insertFilterRow("num-date", $(ev.target).text());
@@ -130,8 +181,9 @@ $(document).ready(function(){
 		} else if (type == "boolean") {
 			insertFilterRow("boolean", $(ev.target).text());
 		}
-		$('.column_name_dropdown .text').text("Add Column to Data");
-	});
+		createDropDown(".filter.modal .content", "table_name_dropdown", "Select Table", Object.keys(schema));
+		$(".column_name_dropdown").remove();	
+	})
 
 
 	// Filter Modal Submitted

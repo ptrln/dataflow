@@ -2,7 +2,6 @@
       <script>
         var data = <%= @data.to_json.html_safe %>;
         var schema = <%= @schema.to_json.html_safe %>; 
-        var headers = window.data.shift()
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin accordion floating">
@@ -26,7 +25,7 @@
   <a class="ui black button">Update Table</a>
 </div>
 		<script>
-			var data = <%  = @data.to_json.html_safe %>;
+			var data = <%= @data.to_json.html_safe %>;
       var schema = <%= @schema.to_json.html_safe %>; 
       var headers = window.data.shift()
       var params = {"select" : {},
@@ -126,9 +125,20 @@
   </div>
 </script>
 
+<script type="text/template" class="ui-dropdown">
+    <div class="ui selection dropdown ui segment <%%- temp.dropdown_name %>" style="margin-left: 60px;">
+      <input type="hidden" name="Criteria">
+      <div class="text" style="margin-top: 6px"> <%%- temp.starting_value %> </div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+       <!-- inserting column names here via javascript -->
+    </div>
+</script>
+
 <script type="text/template" class="column-name-item">
   <div class="item" data-value="<%%- temp.col_index %>"><%%- temp.col_name %></div>
 </script> 
+
 
 <div class="filter ui modal">
   <i class="close icon"></i>
@@ -136,15 +146,7 @@
     Select Criteria to Filter your Data
   </div>
   <div class="content">
-    <!--  inserting filter rows -->
-    <div class="ui selection dropdown ui segment column_name_dropdown" style="margin-left: 60px;">
-      <input type="hidden" name="Criteria">
-      <div class="text" style="margin-top: 6px"> Add Column to Data </div>
-      <i class="dropdown icon"></i>
-      <div class="menu">
-       <!-- inserting column names here via javascript -->
-      </div>
-    </div>
+    <!-- Insert Content -->
   </div>
   <div class="actions">
     <div class="ui button">Cancel</div>
