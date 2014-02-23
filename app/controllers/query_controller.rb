@@ -26,16 +26,19 @@ class QueryController < ApplicationController
     if select.empty?
       @data = []
     else
-      dynamic_select, is_dynamic, dynamic_fields = dynamicify_select(db, select)
-      filter = {}#{"customers" => [["name", "starts_with", "D"]]}
-      sort = [["customers", "age", "asc"]]
+      dynamic_select, is_dynamic_select, dynamic_fields = dynamicify_select(db, select)
+      filter = params[:filter] || params[:filter] #{"customers" => [["name", "starts_with", "D"]]}
+      dynamic_filter_fields, is_dynamic_filter = dynamicify_filter(db, filter)
+      sort = []#[["customers", "age", "asc"]]
 
       sql = construct_sql(dynamic_select, filter, sort)
 
       sql = sql.gsub(/^SELECT/, "SELECT #{column_name_array(dynamic_select, true).join(",")}")
 
       @data = [column_name_array(select)] + ClientBase.connection.select_rows(sql)
-      @data = process_dynamic_column(@data, dynamic_fields) if is_dynamic
+
+      @data = process_dynamic_column(@data, dynamic_fields, dynamic_filter_fields) if is_dynamic_select || is_dynamic_filter
+
     end
 
     respond_to do |format|
@@ -69,11 +72,30 @@ class QueryController < ApplicationController
     end
   end
 
-  def process_dynamic_column(data, dynamic_fields)
+  def dynamicify_filter(db, filter)
+    dynamic_fields = Hash.new { Array.new }
+    filter.each do |table, columns|
+      columns.each_with_index do |column, index|
+        if db.dynamic_columns.where(table: table, name: column).count > 0
+          dynamic_fields[table] = dynamic_fields[table] << columns[index]
+          columns[index] = nil
+        end
+      end
+    end
+
+    if dynamic_fields.empty?
+      [{}, false]
+    else
+      [dynamic_fields, true]
+    end
+
+  end
+
+  def process_dynamic_column(data, dynamic_select_fields, dynamic_filter_fields)
     data.each_with_index do |row, index|
       next if index == 0
 
-      dynamic_fields.each_with_index do |(klass, method), row_index|
+      dynamic_select_fields.each_with_index do |(klass, method), row_index|
         next unless klass && method
         row[row_index] = klass.find(row[row_index]).send(method)
       end
