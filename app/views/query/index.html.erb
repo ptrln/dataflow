@@ -17,7 +17,7 @@
       <div class="table <%= title %> menu"> 
       <% i = 0 %>
       <% while i + 2 < table.length %>
-          <a class="teal item"><%= table[i][0]%></a>
+          <a class="teal item" ><%= table[i][0]%></a>
           <% i += 1 %>
       <% end %>
       </div>
@@ -26,9 +26,12 @@
     <a class="ui black button">Update Table</a>
 </div>
 		<script>
-			var data = <%= @data.to_json.html_safe %>;
+			var data = <%  = @data.to_json.html_safe %>;
       var schema = <%= @schema.to_json.html_safe %>; 
       var headers = window.data.shift()
+      var params = {"select" : {},
+                    "filter" : {},
+                    "sort"   : {}}
 		</script>
 	</div>
 
@@ -69,7 +72,7 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black">
   </div>
 </script>
 
@@ -93,7 +96,7 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black">
   </div>
 </script>
 
@@ -114,7 +117,7 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black" placeholder="True or False">
+    <input class= "value column ui segment" style="border: 1px black" placeholder="True or False">
   </div>
 </script>
 

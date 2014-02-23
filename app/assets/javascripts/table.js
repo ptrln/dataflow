@@ -1,12 +1,14 @@
 $(document).ready(function(){
 	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
+
+
 	$(".menu a").click(function(){
-   if ($(this).hasClass("active")) {
-   	$(this).removeClass("active");
-   } else {
-   	$(this).addClass('active');
-   }});
+	   if ($(this).hasClass("active")) {
+	   	$(this).removeClass("active");
+	   } else {
+	   	$(this).addClass('active');
+   	}});
 
 	$(".header.item").click(function() {
 		$(this).next('div').toggle();
@@ -108,6 +110,7 @@ $(document).ready(function(){
 	// Filter Button pressed
 	$('.button.filter').click(function(){
 		$('.filter-criteria').remove()
+		$('.column_name_dropdown .item').remove()
 		console.log("filter");
 		$('.ui.modal').modal("show");
 		insertColumnNamesIntoDropdown();
@@ -115,11 +118,11 @@ $(document).ready(function(){
 		$('.column_name_dropdown .text').text("Add Column to Data");
 	});
 
-	// Method is called when user selects column to filter by
+	// User selects column to filter by
 	$(".filter.modal .menu").click(function(ev){
-		col_selected = ($(ev.target).attr("data-value"));
+		var col_selected = ($(ev.target).attr("data-value"));
 		console.log("column selected", col_selected);
-		type = schema['customers'][col_selected][1]
+		var type = schema['customers'][col_selected][1]
 		if(type == "datetime" || type == "integer" || type == "float"){
 			insertFilterRow("num-date", $(ev.target).text());
 		} else if (type == "string") {
@@ -128,6 +131,20 @@ $(document).ready(function(){
 			insertFilterRow("boolean", $(ev.target).text());
 		}
 		$('.column_name_dropdown .text').text("Add Column to Data");
+	});
+
+
+	// Filter Modal Submitted
+	$('filter.ui.modal .ui.button').click(function(ev){
+		console.log("modal-submitted")
+		names = $('.filter.modal .content .filter-criteria .name')
+		c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
+		criterion = []
+		for(i = 0; i < c.length; i ++){
+			criterion.push($(c[i]).attr("value"));
+		}
+		values = $('.filter.modal .content .filter-criteria input.value');
+
 	});
 
 
