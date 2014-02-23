@@ -6,6 +6,8 @@ class Database < ActiveRecord::Base
   serialize :schema
   serialize :relations
 
+  has_many :dynamic_columns
+
   before_create :build_relations
 
   RAILS_TABLES = {"schema_migrations" => true}
@@ -108,6 +110,15 @@ class Database < ActiveRecord::Base
     self.save!
   end
 
+  def dynamic_schema
+    self.dynamic_columns.each do |dynamic_column|
+      if self.schema[dynamic_column.table]
+        self.schema[dynamic_column.table] = self.schema[dynamic_column.table] << [dynamic_column.name, :dynamic, "dynamic column"]
+      end
+    end
+    self.schema
+  end
+
   def rebuild!
     self.schema = {}
     self.relations = {}
@@ -129,6 +140,8 @@ class Database < ActiveRecord::Base
 
       relations = self.relations[table_name]
 
+      dynamic = dynamic_columns.where(table: table_name)
+
       Object.const_set(class_name, Class.new(ClientBase) do
         self.table_name = table_name
 
@@ -140,8 +153,10 @@ class Database < ActiveRecord::Base
           end
         end
 
-
-
+        dynamic.each do |d|
+          self.send(:define_method, d.name, eval("lambda {#{d.code}}")) 
+        end
+        
       end)
     end
 
