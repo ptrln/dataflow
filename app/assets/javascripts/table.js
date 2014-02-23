@@ -1,8 +1,6 @@
 $(document).ready(function(){
 	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
-
-
 	$(".menu a").click(function(){
 		var $this = $(this);
 	   if ($this.hasClass("active")) {
@@ -66,7 +64,7 @@ $(document).ready(function(){
 	var createTable = function(d){
 		$('#table').remove();
 		$('#table_container').append("<div id='table'>");
-		headers = window.data.shift();
+		headers = window.data.shift() || [];
 		$('#table').handsontable({
 			data: d, 
 			rowHeaders: true,
@@ -76,6 +74,7 @@ $(document).ready(function(){
 			width: 1000,
 			height: 500,
 			afterSelection: afterSelection,
+			columnSorting: true,
 			cells: function(){
 				var cellProperties = {};
 				cellProperties.readOnly = true;
@@ -154,8 +153,6 @@ $(document).ready(function(){
 		$('.dropdown').dropdown();
 		$('.' + dropdown_class_name + ' .text').text(start);
 	}
-
-
 
 	// insertColumnNamesIntoDropdown(".column_name_dropdown.filter.modal menu", )
 

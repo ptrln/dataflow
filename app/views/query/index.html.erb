@@ -35,25 +35,29 @@
 		</script>
 	</div>
 
-<div class="segment">
-  <h1 class="ui header">Query Data</h1>
+<!-- <div class="ui page grid">"> -->
+<div class="ui page grid">
   <div class="ui right floated black launch button">
     <i class="list layout icon"></i> Sources
   </div>
+  <h1 class="ui header">Query Data</h1>
+  
 
   <div id="grid-container"> 
     <div class="small ui button filter"> Filter </div>
     <div class="small ui button sort "> Sort </div>
     <div class="small ui button add_column"><a href='<%= new_database_dynamic_column_path @database %>'> Add Dynamic Column </a></div>
   </div>
-</div>
+</div> 
+
 
 <!-- DARWISH CODE -->
 
+
+
   <div id="table_container">
     <div id="table" class="handsontable" style="overflow: scroll"></div>
-  </div> 
-    
+  </div>
 <!-- Filter Modal -->
 
 
@@ -91,7 +95,7 @@
     <div class="column">
       <div class="ui selection dropdown ui segment filter-dropdown" style="margin-left: 60px;">
         <input type="hidden" name="Criteria">
-        <div class="text" style="margin-top: 6px"> Contains </div>
+        <div class="text" style="margin-top: 6px"> Equals </div>
         <i class="dropdown icon"></i>
         <div class="menu">
           <div class="item active" data-value="equals">Equals</div>
