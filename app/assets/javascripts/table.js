@@ -1,15 +1,19 @@
 $(document).ready(function(){
-  $(".launch.button").mouseenter(function(){
-  	$(this).stop().animate({width: '140px'}, 200, 
-  	 function(){$(this).find('.text').show();});
-		}).mouseleave(function (event){ 
-			$(this).find('.text').hide();
-			$(this).stop().animate({width: '70px'}, 200);});
+  // $(".launch.button").mouseenter(function(){
+  // 	$(this).stop().animate({width: '140px'}, 200, 
+  // 	 function(){$(this).find('.text').show();});
+		// }).mouseleave(function (event){ 
+		// 	$(this).find('.text').hide();
+		// 	$(this).stop().animate({width: '70px'}, 200);});
 
 	$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
 
-
-
+	$(".menu a").click(function(){
+   if ($(this).hasClass("active")) {
+   	$(this).removeClass("active");
+   } else {
+   	$(this).addClass('active');
+   }});
 
 	// $("#sidebar").hide();
 
