@@ -1,8 +1,6 @@
 $(document).ready(function(){
 	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
-
-
 	$(".menu a").click(function(){
 		var $this = $(this);
 	   if ($this.hasClass("active")) {

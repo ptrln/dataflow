@@ -27,8 +27,9 @@ class QueryController < ApplicationController
       @data = []
     else
       dynamic_select, is_dynamic_select, dynamic_fields = dynamicify_select(db, select)
-      filter = params[:filter] || {} #{"customers" => [["name", "starts_with", "D"]]}
+      filter = params[:filter] || {"customers" => [["item_count", "starts_with", "1"]]}
       dynamic_filter_fields, is_dynamic_filter = dynamicify_filter(db, filter)
+
       sort = []#[["customers", "age", "asc"]]
 
       sql = construct_sql(dynamic_select, filter, sort)
@@ -37,7 +38,7 @@ class QueryController < ApplicationController
 
       @data = [column_name_array(select)] + ClientBase.connection.select_rows(sql)
 
-      @data = process_dynamic_column(@data, dynamic_fields, dynamic_filter_fields) if is_dynamic_select || is_dynamic_filter
+      @data = process_dynamic_column(@data, dynamic_fields, dynamic_filter_fields) if (is_dynamic_select || is_dynamic_filter)
 
     end
 
@@ -81,6 +82,7 @@ class QueryController < ApplicationController
           columns[index] = nil
         end
       end
+      filter[table] = columns.compact
     end
 
     if dynamic_fields.empty?
@@ -98,18 +100,33 @@ class QueryController < ApplicationController
       dynamic_select_fields.each_with_index do |(table_klass, method), row_index|
         next unless table_klass && method
         klass = table_klass.classify.constantize
-        begin
+        #begin
           row[row_index] = klass.find(row[row_index]).send(method)
-          if dynamic_filter_fields[table_klass].include?(method)
-            p true
-            #data[index] = nil
+
+          if dynamic_filter_fields[table_klass] && dynamic_filter_fields[table_klass].any? { |field| field.first == method }
+            _, operand, values = dynamic_filter_fields[table_klass].select { |field| field.first == method }.first
+
+            data[index] = nil unless filter_dynamic_field(operand, row[row_index], values)
           end
-        rescue
-          row[row_index] = "ERROR"
-        end
+        # rescue
+        #   row[row_index] = "ERROR"
+        # end
       end
     end
-    data.compact!
+    data.compact
+  end
+
+  def filter_dynamic_field(operand, data, values)
+    case operand
+    when "greater_than" then data > values.to_i
+    when "less_than" then data < values.to_i
+    when "equal_to", "equal", "exactly_matches" then data == values.to_i
+    when "in" then values.split(",").include?(data.to_s)
+    when "contains" then data.to_s.match(eval("/#{values}/"))
+    when "ends_with" then data.to_s.match(eval("/#{values}$/"))
+    when "starts_with" then data.to_s.match(eval("/^#{values}/"))
+    else true
+    end
   end
 
   def column_name_array(select_params, escape = false)
