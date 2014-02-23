@@ -28,7 +28,7 @@
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
       var schema = <%= @schema.to_json.html_safe %>; 
-      var headers = window.data.shift()
+      var headers = window.data.shift() || [];
       var params = {"select" : {},
                     "filter" : {},
                     "sort"   : {}}
@@ -93,7 +93,7 @@
         </div>
       </div>
     </div>
-    <input class= "value column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black" placeholder="Enter criteria value">
   </div>
 </script>
 
@@ -117,7 +117,7 @@
         </div>
       </div>
     </div>
-    <input class= "value column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black" placeholder="Enter criteria value">
   </div>
 </script>
 
@@ -142,8 +142,36 @@
   </div>
 </script>
 
+<script type="text/template" class="filter-row-dynamic">
+  <div class="ui three column grid filter-criteria"> 
+    <div class="column">
+      <div class="ui segment">
+        <div class="name"> <%%- temp.col_name %> </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui selection dropdown ui segment  " style="margin-left: 60px;">
+        <input type="hidden" name="Criteria">
+        <div class="text" style="margin-top: 6px"> Equals </div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item" data-value="contains">Contains</div>
+          <div class="item" data-value="equals">Equals</div>
+          <div class="item" data-value="less_than">Less Than</div>
+          <div class="item" data-value="greater_than">Greater Than</div>
+          <div class="item" data-value="is_in">In (Comma Separated Values) </div>
+          <div class="item" data-value="start_with">Starts With</div>
+          <div class="item" data-value="ends_with">Ends With</div>
+          <div class="item" data-value="exactly_matches">Exactly Matches</div>
+        </div>
+      </div>
+    </div>
+    <input class= "value column ui segment" style="border: 1px black" placeholder="Enter criteria value">
+  </div>
+</script>
+
 <script type="text/template" class="ui-dropdown">
-    <div class="ui selection dropdown ui segment <%%- temp.dropdown_name %>" style="margin-left: 60px;">
+    <div class="ui selection dropdown ui segment <%%- temp.dropdown_name %>" style="">
       <input type="hidden" name="Criteria">
       <div class="text" style="margin-top: 6px"> <%%- temp.starting_value %> </div>
       <i class="dropdown icon"></i>
