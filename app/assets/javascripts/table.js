@@ -9,7 +9,7 @@ $(document).ready(function(){
    }});
 
 	$(".header.item").click(function() {
-		$($(this).child()).toggle();
+		$(this).next('div').toggle();
 	});
 
 
