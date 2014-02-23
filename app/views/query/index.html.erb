@@ -2,7 +2,6 @@
       <script>
         var data = <%= @data.to_json.html_safe %>;
         var schema = <%= @schema.to_json.html_safe %>; 
-        var headers = window.data.shift()
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin accordion floating">
@@ -13,17 +12,27 @@
         <i class="table icon"></i>
         <%= title.capitalize %>
       </div>
+
     <div class="table <%= title %> menu"> 
-    <% i = 0 %>
-    <% while i  < table.length %>
-      <a class="teal item"><%= table[i][0]%></a>
-      <% i += 1 %>
-    <% end %>
+      <% i = 0 %>
+      <% while i  < table.length %>
+        <a class="teal item" data-table="<%= title %>" data-column="<%=table[i][0]%>"><%= table[i][0]%></a>
+        <% i += 1 %>
+      <% end %>
     </div>
     <% end %>
   </div>
   <a class="ui black button">Update Table</a>
 </div>
+		<script>
+			var data = <%= @data.to_json.html_safe %>;
+      var schema = <%= @schema.to_json.html_safe %>; 
+      var headers = window.data.shift()
+      var params = {"select" : {},
+                    "filter" : {},
+                    "sort"   : {}}
+		</script>
+	</div>
 
 <!-- <div class="ui page grid">"> -->
 <div class="ui one column page grid">
@@ -71,7 +80,7 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black">
   </div>
 </script>
 
@@ -95,7 +104,7 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black">
+    <input class= "value column ui segment" style="border: 1px black">
   </div>
 </script>
 
@@ -116,13 +125,24 @@
         </div>
       </div>
     </div>
-    <input class= "column ui segment" style="border: 1px black" placeholder="True or False">
+    <input class= "value column ui segment" style="border: 1px black" placeholder="True or False">
   </div>
+</script>
+
+<script type="text/template" class="ui-dropdown">
+    <div class="ui selection dropdown ui segment <%%- temp.dropdown_name %>" style="margin-left: 60px;">
+      <input type="hidden" name="Criteria">
+      <div class="text" style="margin-top: 6px"> <%%- temp.starting_value %> </div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+       <!-- inserting column names here via javascript -->
+    </div>
 </script>
 
 <script type="text/template" class="column-name-item">
   <div class="item" data-value="<%%- temp.col_index %>"><%%- temp.col_name %></div>
 </script> 
+
 
 <div class="filter ui modal">
   <i class="close icon"></i>
@@ -130,15 +150,7 @@
     Select Criteria to Filter your Data
   </div>
   <div class="content">
-    <!--  inserting filter rows -->
-    <div class="ui selection dropdown ui segment column_name_dropdown" style="margin-left: 60px;">
-      <input type="hidden" name="Criteria">
-      <div class="text" style="margin-top: 6px"> Add Column to Data </div>
-      <i class="dropdown icon"></i>
-      <div class="menu">
-       <!-- inserting column names here via javascript -->
-      </div>
-    </div>
+    <!-- Insert Content -->
   </div>
   <div class="actions">
     <div class="ui button">Cancel</div>
