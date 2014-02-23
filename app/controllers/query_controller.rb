@@ -86,6 +86,10 @@ class QueryController < ApplicationController
   end
 
   def construct_sort_sql(main_klass, sort)
+    sort.each do |table, column, order|
+      next unless ["DESC", "ASC"].include?(order.upcase)
+      main_klass = main_klass.order("\"#{table}\".\"#{column}\" #{order.upcase}")
+    end
     main_klass
   end
 
