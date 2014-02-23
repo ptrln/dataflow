@@ -17,3 +17,4 @@
 //= require semantic-ui
 //= require underscore
 //= require codemirror
+//= require ruby

@@ -29,3 +29,13 @@
   </div>
   <% end %>
 </div>
+
+<script>
+  $(function(){
+    CodeMirror.fromTextArea(document.getElementById("dynamic_column_code"), {
+      mode:  "ruby",
+      lineNumbers: true,
+      theme: "mdn-like"
+    });
+  });
+</script>
