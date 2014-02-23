@@ -5,7 +5,7 @@ class QueryController < ApplicationController
     if db
       execute(db)
     else
-
+      redirect_to new_database_path
     end
   end
 
@@ -17,6 +17,7 @@ class QueryController < ApplicationController
   private
 
   def execute(db)
+    @database = db
     @schema = db.dynamic_schema
     db.build_classes
 
@@ -25,16 +26,19 @@ class QueryController < ApplicationController
     if select.empty?
       @data = []
     else
-      dynamic_select, is_dynamic, dynamic_fields = dynamicify_select(db, select)
-      filter = {}#{"customers" => [["name", "starts_with", "D"]]}
-      sort = [["customers", "age", "asc"]]
+      dynamic_select, is_dynamic_select, dynamic_fields = dynamicify_select(db, select)
+      filter = params[:filter] || {} #{"customers" => [["name", "starts_with", "D"]]}
+      dynamic_filter_fields, is_dynamic_filter = dynamicify_filter(db, filter)
+      sort = []#[["customers", "age", "asc"]]
 
       sql = construct_sql(dynamic_select, filter, sort)
 
       sql = sql.gsub(/^SELECT/, "SELECT #{column_name_array(dynamic_select, true).join(",")}")
 
       @data = [column_name_array(select)] + ClientBase.connection.select_rows(sql)
-      @data = process_dynamic_column(@data, dynamic_fields) if is_dynamic
+
+      @data = process_dynamic_column(@data, dynamic_fields, dynamic_filter_fields) if is_dynamic_select || is_dynamic_filter
+
     end
 
     respond_to do |format|
@@ -52,7 +56,7 @@ class QueryController < ApplicationController
       cloned.each_with_index do |column, index|
         if db.dynamic_columns.where(table: table, name: column).count > 0
           cloned[index] = "id"
-          dynamic_fields << [table.classify.constantize, column]
+          dynamic_fields << [table, column]
         else
           dynamic_fields << nil
         end
@@ -68,15 +72,41 @@ class QueryController < ApplicationController
     end
   end
 
-  def process_dynamic_column(data, dynamic_fields)
+  def dynamicify_filter(db, filter)
+    dynamic_fields = Hash.new { Array.new }
+    filter.each do |table, columns|
+      columns.each_with_index do |column, index|
+        if db.dynamic_columns.where(table: table, name: column.first).count > 0
+          dynamic_fields[table] = dynamic_fields[table] << column
+          columns[index] = nil
+        end
+      end
+    end
+
+    if dynamic_fields.empty?
+      [{}, false]
+    else
+      [dynamic_fields, true]
+    end
+
+  end
+
+  def process_dynamic_column(data, dynamic_select_fields, dynamic_filter_fields)
     data.each_with_index do |row, index|
       next if index == 0
 
-      dynamic_fields.each_with_index do |(klass, method), row_index|
-        next unless klass && method
+      dynamic_select_fields.each_with_index do |(table_klass, method), row_index|
+        next unless table_klass && method
+        klass = table_klass.classify.constantize
         row[row_index] = klass.find(row[row_index]).send(method)
+
+        if dynamic_select_fields[table_klass].include?(method)
+          p true
+          #data[index] = nil
+        end
       end
     end
+    data.compact!
   end
 
   def column_name_array(select_params, escape = false)
