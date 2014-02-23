@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
+	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
 	$(".menu a").click(function(){
    if ($(this).hasClass("active")) {
@@ -8,7 +8,10 @@ $(document).ready(function(){
    	$(this).addClass('active');
    }});
 
-	// $("#sidebar").hide();
+	$(".header.item").click(function() {
+		$($(this).child()).toggle();
+	});
+
 
 
 	var generateData = function(rows, columns){
