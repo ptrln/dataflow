@@ -28,7 +28,7 @@
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
       var schema = <%= @schema.to_json.html_safe %>; 
-      var headers = window.data.shift()
+      var headers = window.data.shift() || [];
       var params = {"select" : {},
                     "filter" : {},
                     "sort"   : {}}

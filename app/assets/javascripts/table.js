@@ -240,4 +240,8 @@ $(document).ready(function(){
 
 	});
 
+	window.setTimeout(function(){
+		$(".ui.right.floated.black.launch.button").click()
+	}, 100);
+
 });
