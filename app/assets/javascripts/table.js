@@ -17,9 +17,13 @@ $(document).ready(function(){
    	  }
    	});
 
+
 	$(".header.item").click(function() {
-		$(this).next('div').toggle();
+		$(this).next('div').toggle("fast");
 	});
+
+
+
 
 	var generateData = function(rows, columns){
 		arr = [] 
@@ -71,8 +75,17 @@ $(document).ready(function(){
 
 	});
 
-	
-
+var data_cols = _.zip.apply(null, window.data);
+  
+  var countData = function(data) {
+  	result = { };
+		for(i = 0; i < data.length; ++i) {
+		  if(!result[data[i]])
+		  		result[data[i]] = 0;
+		  ++result[data[i]];
+		}
+		return result
+	}
 
 
 	// ************ POPULATE TABLE CODE *********** //  
@@ -198,9 +211,5 @@ $(document).ready(function(){
 		values = $('.filter.modal .content .filter-criteria input.value');
 
 	});
-
-
-
-     
 
 });

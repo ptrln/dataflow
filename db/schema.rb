@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140222182606) do
+ActiveRecord::Schema.define(:version => 20140223065752) do
 
   create_table "databases", :force => true do |t|
     t.string   "name"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(:version => 20140222182606) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.text     "relations"
+  end
+
+  create_table "dynamic_columns", :force => true do |t|
+    t.integer  "database_id"
+    t.string   "name"
+    t.string   "table"
+    t.text     "code"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
 end
