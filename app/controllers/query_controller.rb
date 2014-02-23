@@ -98,11 +98,14 @@ class QueryController < ApplicationController
       dynamic_select_fields.each_with_index do |(table_klass, method), row_index|
         next unless table_klass && method
         klass = table_klass.classify.constantize
-        row[row_index] = klass.find(row[row_index]).send(method)
-
-        if dynamic_select_fields[table_klass].include?(method)
-          p true
-          #data[index] = nil
+        begin
+          row[row_index] = klass.find(row[row_index]).send(method)
+          if dynamic_filter_fields[table_klass].include?(method)
+            p true
+            #data[index] = nil
+          end
+        rescue
+          row[row_index] = "ERROR"
         end
       end
     end
