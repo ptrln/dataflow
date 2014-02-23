@@ -67,10 +67,10 @@ class Database < ActiveRecord::Base
       end
     end
 
-    build_nested_relations
-
     self.relations = relations
     self.save
+
+    build_nested_relations
 
     self.relations
   end
