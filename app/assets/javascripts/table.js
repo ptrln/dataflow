@@ -93,14 +93,17 @@ $(document).ready(function(){
 		}
 	}
 
-	// ************ POPULATE TABLE CODE *********** //  
-	$(document).on("click", "#sidebar .button", function(){
+	var updateData = function(){
 		$.get(window.location.href + "?" + $.param(params), function(response){
 			window.data = response;
 			createTable(window.data);
 			$('#table').handsontable('render');
 		});
+	}
 
+	// ************ POPULATE TABLE CODE *********** //  
+	$(document).on("click", "#sidebar .button", function(){
+		updateData()
 	});
 
 
@@ -190,7 +193,7 @@ $(document).ready(function(){
 			var table_name = $(ev.target).text();
 			col_names = [] 
 			for(i=0; i < schema[table_name].length; i++){
-				col_names.push(schema[table_name][i][0]);
+				col_names.push(table_name + "." + schema[table_name][i][0]);
 			}
 			createDropDown(".filter.modal .content", "column_name_dropdown", "Select Column From " + table_name, col_names);
 			$(".column_name_dropdown .menu").click(function(ev){
@@ -210,15 +213,26 @@ $(document).ready(function(){
 
 	// Filter Modal Submitted
 	$('.filter.ui.modal .ui.button').click(function(ev){
-		console.log("modal-submitted")
-		names = $('.filter.modal .content .filter-criteria .name')
-		c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
-		criterion = []
+		console.log("modal-submitted");
+		var names = $('.filter.modal .content .filter-criteria .name')
+		var c = $('.filter.modal .content .filter-criteria input[name="Criteria"]').toArray()
+		var criterion = []
 		for(i = 0; i < c.length; i ++){
 			criterion.push($(c[i]).attr("value"));
 		}
 
-		values = $('.filter.modal .content .filter-criteria input.value');
+		var values = $('.filter.modal .content .filter-criteria input.value');
+
+
+		for(i=0; i < names.length; i ++){
+			var table_name = $(names[i]).text().split(".")[0]
+			if(params.filter[table_name])
+				params.filter[table_name].push([$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()])
+			else
+				params.filter[table_name] = [[$(names[i]).text().split(".")[1], criterion[i], $(values[i]).val()]]
+		}
+
+		updateData();
 
 	});
 
