@@ -34,7 +34,7 @@ class QueryController < ApplicationController
 
       sort = []#[["customers", "age", "asc"]]
 
-      sql = construct_sql(dynamic_select, filter, sort)
+      sql = construct_sql(db, dynamic_select, filter, sort)
 
       sql = sql.gsub(/^SELECT/, "SELECT #{column_name_array(dynamic_select, true).join(",")}")
 
@@ -163,18 +163,23 @@ class QueryController < ApplicationController
     columns
   end
 
-  def construct_sql(select, filter, sort)
-    main_klass = construct_select_sql(select, filter, sort)
+  def construct_sql(db, select, filter, sort)
+    main_klass = construct_select_sql(db, select, filter, sort)
     main_klass = construct_filter_sql(main_klass, filter)
     main_klass = construct_sort_sql(main_klass, sort)
     main_klass.to_sql
   end
 
-  def construct_select_sql(select, filter, sort)
+  def construct_select_sql(db, select, filter, sort)
     tables = (select.keys + filter.keys + sort.map(&:first)).uniq
-    main_klass = tables.shift.classify.constantize
+    main_table = tables.shift
+    main_klass = main_table.classify.constantize
     tables.each do |table|
-      main_klass = main_klass.joins(table.to_sym)
+      if db.relations[main_table].any? { |s| s[:name] == table }
+        main_klass = main_klass.joins(table.to_sym)
+      elsif db.relations[main_table].any? { |s| s[:name] == table.singularize }
+        main_klass = main_klass.joins(table.singularize.to_sym)
+      end
     end
     main_klass.select("")
   end
