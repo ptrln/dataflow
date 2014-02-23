@@ -72,8 +72,7 @@ window.runTable = function(){
 			colHeaders: headers,
 			contextMenu: true,
 			stretchH: 'all',
-			width: 1000,
-			height: 500,
+			// width: 900,
 			afterSelection: afterSelection,
 			columnSorting: true,
 			cells: function(){

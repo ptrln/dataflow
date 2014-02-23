@@ -17,3 +17,31 @@
 .ui.selection.dropdown.ui.segment.column_name_dropdown{
 	margin-left: 60px;
 }
+
+.ui.green.buttons .button, .ui.green.button{
+	background-color: #16A085;
+	margin-right: 3px;
+	border-radius: 3px;
+}
+
+.ui.green.buttons .button:hover, .ui.green.button:hover, .ui.green.buttons .active.button, .ui.green.button.active{
+	background-color: #1ABC9C;
+}
+
+.ui.black.buttons .button, .ui.black.button{
+	background-color: #34495E;
+}
+
+.ui.black.buttons .button, .ui.black.button:hover{
+	background-color: #416283;
+}
+
+.ui.menu .header.item{
+	background-color: #BDC3C7;
+}
+
+#table_container{
+	margin-left: 2%;
+	margin-top: 1.5%;
+	margin-right: 2%
+}
