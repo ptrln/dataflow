@@ -16,17 +16,22 @@ class QueryController < ApplicationController
     @schema = db.dynamic_schema
     db.build_classes
 
-    select = {"customers" => ["id", "email", "name", "gender"]}
-    dynamic_select, is_dynamic, dynamic_fields = dynamicify_select(db, select)
-    filter = {}#{"customers" => [["name", "starts_with", "D"]]}
-    sort = [["customers", "age", "asc"]]
+    select = params[:select] || {}
 
-    sql = construct_sql(dynamic_select, filter, sort)
+    if select.empty?
+      @data = []
+    else
+      dynamic_select, is_dynamic, dynamic_fields = dynamicify_select(db, select)
+      filter = {}#{"customers" => [["name", "starts_with", "D"]]}
+      sort = [["customers", "age", "asc"]]
 
-    sql = sql.gsub(/^SELECT/, "SELECT #{column_name_array(dynamic_select, true).join(",")}")
+      sql = construct_sql(dynamic_select, filter, sort)
 
-    @data = [column_name_array(select)] + ClientBase.connection.select_rows(sql)
-    @data = process_dynamic_column(@data, dynamic_fields) if is_dynamic
+      sql = sql.gsub(/^SELECT/, "SELECT #{column_name_array(dynamic_select, true).join(",")}")
+
+      @data = [column_name_array(select)] + ClientBase.connection.select_rows(sql)
+      @data = process_dynamic_column(@data, dynamic_fields) if is_dynamic
+    end
 
     respond_to do |format|
       format.json { render :json => @data }
