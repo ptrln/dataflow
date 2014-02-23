@@ -1,30 +1,29 @@
-<h1>Query Data</h1>
-
 <%= javascript_include_tag "table" %> 
+<h1 class="ui header">Query Data</h1>
 
-<div class="ui black huge launch right attached button" style="width: 70px;">
-      <i class="icon list layout"></i>
-      <span class="text" style="display: none;">Sources</span>
-</div>
+<div class="ui right floated black launch button">
+        <i class="list layout icon"></i> Sources
+      </div>
 
-<div id="sidebar" class="ui left sidebar vertical floating">
+<div id="sidebar" class="ui left sidebar vertical thin accordion floating">
+<h2 class="ui header">Select Data<h2>
+	 <div class="ui fluid vertical menu"> <!-- need to add accordian -->
 
-	 <h1 class="ui header">Select Data<h1>
-	 <div class="ui fluid vertical menu">
 	 	 <% @schema.each do |title, table| %>
-      <div class="header large item">
+      <div class="header item">
         <i class="table icon"></i>
         <%= title.capitalize %>
       </div>
+      <div class="table <%= title %> menu"> 
       <% i = 0 %>
       <% while i + 2 < table.length %>
-        <div class="menu">
-          <a class="item"><%= table[i][0]%></a>
+          <a class="teal item"><%= table[i][0]%></a>
           <% i += 1 %>
-        </div>
       <% end %>
+      </div>
      <% end %>
     </div>
+    <a class="ui black button">Update Table</a>
 </div>
 		<script>
 			var data = <%= @data.to_json.html_safe %>;
@@ -33,12 +32,6 @@
 		</script>
 	</div>
 
-
-
-
-
-
-  
 
 
 <!-- DARWISH CODE -->

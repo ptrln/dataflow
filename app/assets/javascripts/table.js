@@ -1,18 +1,17 @@
 $(document).ready(function(){
+	$(".sidebar").sidebar('attach events','.ui.launch.button');
 
-  $(".launch.button").mouseenter(function(){
-  	$(this).stop().animate({width: '140px'}, 200, 
-  	 function(){$(this).find('.text').show();});
-		}).mouseleave(function (event){ 
-			$(this).find('.text').hide();
-			$(this).stop().animate({width: '70px'}, 200);});
+	$(".menu a").click(function(){
+   if ($(this).hasClass("active")) {
+   	$(this).removeClass("active");
+   } else {
+   	$(this).addClass('active');
+   }});
 
-	$(".ui.sidebar").sidebar('attach events','.ui.launch.button');
+	$(".header.item").click(function() {
+		$(this).next('div').toggle();
+	});
 
-
-
-
-	// $("#sidebar").hide();
 
 
 	var generateData = function(rows, columns){
