@@ -76,6 +76,7 @@ $(document).ready(function(){
 			width: 1000,
 			height: 500,
 			afterSelection: afterSelection,
+			columnSorting: true,
 			cells: function(){
 				var cellProperties = {};
 				cellProperties.readOnly = true;
