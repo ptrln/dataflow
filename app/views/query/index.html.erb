@@ -5,6 +5,7 @@
       </script>
 
 <div id="sidebar" class="ui left sidebar vertical thin floating">
+  <h1 class="ui header" style="text-align:center; padding-top:10px;">Data[x]</h1>
   <div class="ui fluid teal vertical menu"> <!-- need to add accordian -->
     <% @schema.each do |title, table| %>
       <div class="header item">
@@ -36,11 +37,10 @@
 	</div>
 
 <!-- <div class="ui page grid">"> -->
-<div class="ui page grid">
+<div class="ui page grid" style="margin-top: 15px;">
   <div class="ui right floated black launch button">
     <i class="list layout icon"></i> Sources
   </div>
-  <h1 class="ui header">Data[x]</h1>
 
 
   <div class="green ui buttons">
@@ -63,7 +63,7 @@
     </div>
     <a href="#" id='export_csv_btn'>
       <div class="ui button add_column">
-        <i class="bolt icon"></i>
+        <i class="download disk icon"></i>
         Export CSV
       </div>
     </a>
