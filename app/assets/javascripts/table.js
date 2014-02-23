@@ -22,6 +22,10 @@ window.runTable = function(){
 	});
 
 
+	$("#export_csv_btn").on('click', function(event){
+		$(this).attr('href', window.location.href + ".csv?" + $.param(params))
+		console.log( window.location.href + ".csv?" + $.param(params));
+	});
 
 
 	var generateData = function(rows, columns){

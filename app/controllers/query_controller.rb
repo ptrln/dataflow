@@ -1,5 +1,6 @@
 class QueryController < ApplicationController
-
+  require 'csv'
+  
   def index
     db = Database.first
     if db
@@ -46,6 +47,15 @@ class QueryController < ApplicationController
     respond_to do |format|
       format.json { render :json => @data }
       format.html { render :index }
+      format.csv { send_data data_to_csv(@data), filename: "datax.csv" }
+    end
+  end
+
+  def data_to_csv(data, options = {})
+    CSV.generate(options) do |csv|
+      data.each do |row|
+        csv << row
+      end
     end
   end
 
