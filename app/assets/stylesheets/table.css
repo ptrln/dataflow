@@ -11,4 +11,11 @@
 
 	width: 200px;
 	height: 150px;
-};
+}
+
+.filter-criteria input{
+	height: 100px;
+	width: 100%;
+	border-radius: 5px;
+}
+
